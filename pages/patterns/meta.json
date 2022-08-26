@@ -1,3 +1,4 @@
 {
-  "normalization": "Resource normalization"
+  "normalization": "Resource normalization",
+  "factories": "Creating your own handle factory"
 }

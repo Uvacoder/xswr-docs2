@@ -1,0 +1,74 @@
+# Creating your own handle factory
+
+You don't like some of the behaviours of `useSingle` or `useScroll`?
+
+You want to create your own handle factory because you think you're smarter than me?
+
+Well, you can.
+
+## useSingleButForceExpiration
+
+This one will wrap the given poster in order to add a custom expiration time.
+
+```tsx
+export function useSingleButForceExpiration<D = any, E = any, K = any>(
+  key: K | undefined,
+  poster: Poster<D, K>,
+  cooldown?: number,
+  timeout?: number
+): SingleHandle<D, E, K> {
+  const wposter = useCallback<Poster<D,K>>(async (...params) => {
+    const result = await poster(...params)
+    const expiration = Date.now() + (5 * 60 * 1000)
+    return { ...result, expiration }
+  }, [poster])
+
+  return useSingle(key, wposter, cooldown, timeout)
+}
+```
+
+## useReverseScroll
+
+This one is more complex since it will use its own helper functions.
+
+```tsx
+export type ReverseScroller<D = any, K = any> =
+  (next?: D) => K | undefined
+
+export namespace ReverseScroll {
+  async first<D = any, E = any, K = any>(
+    skey: string | undefined,
+    scroller: ReverseScroller<D, K>,
+    fetcher: XSWR.Fetcher<D, K>,
+    cooldown = XSWR.DEFAULT_COOLDOWN,
+    timeout = XSWR.DEFAULT_TIMEOUT,
+    aborter = new AbortController()
+  ) {
+    // Fill it
+  }
+
+  async scroll<D = any, E = any, K = any>(
+    skey: string | undefined,
+    scroller: ReverseScroller<D, K>,
+    fetcher: XSWR.Fetcher<D, K>,
+    cooldown = XSWR.DEFAULT_COOLDOWN,
+    timeout = XSWR.DEFAULT_TIMEOUT,
+    aborter = new AbortController()
+  ) {
+    // Fill it
+  }
+}
+
+export interface ReverseScrollHandle<D = any, E = any, K = any> extends Handle<D[], E, K> {
+  scroll(): Promise<State<D[], E> | undefined>
+}
+
+export function useReverseScroll<D = any, E = any, K = any>(
+  scroller: ReverseScroller<D, K>,
+  fetcher: XSWR.Fetcher<D, K>,
+  cooldown?: number,
+  timeout?: number
+): ReverseScrollHandle<D, E, K> {
+  // Fill it
+}
+```
