@@ -36,7 +36,7 @@ export type ReverseScroller<D = any, K = any> =
   (next?: D) => K | undefined
 
 export namespace ReverseScroll {
-  async first<D = any, E = any, K = any>(
+  async last<D = any, E = any, K = any>(
     skey: string | undefined,
     scroller: ReverseScroller<D, K>,
     fetcher: XSWR.Fetcher<D, K>,
