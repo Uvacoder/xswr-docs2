@@ -2,7 +2,7 @@
 
 You can use `useMount` to fetch a resource on mount only.
 
-```typescript
+```tsx
 XSWR.useMount(handle) 
 ```
 
@@ -16,7 +16,7 @@ Won't fetch on key change, see [useFetch](/features/use-fetch) for doing so.
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -28,7 +28,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useMount(handle: Handle) {
   const { fetch } = handle
 

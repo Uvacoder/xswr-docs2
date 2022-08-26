@@ -2,7 +2,7 @@
 
 You can use `useOnce` to fetch a resource on mount and on key change, but only if there is no data.
 
-```typescript
+```tsx
 XSWR.useOnce(handle) 
 ```
 
@@ -16,7 +16,7 @@ Will still try to fetch if there is an error.
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -28,7 +28,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useOnce(handle: Handle) {
   const { data, fetch } = handle
 

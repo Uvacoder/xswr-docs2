@@ -2,13 +2,13 @@
 
 You can use `useDebug` to log a handle in the console when it's updated.
 
-```typescript
+```tsx
 XSWR.useDebug(handle, label)
 ```
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -21,7 +21,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useDebug<D = any, E = any>(
   handle: Handle<D, E>,
   label: string

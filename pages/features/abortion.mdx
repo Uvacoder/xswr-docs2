@@ -8,7 +8,7 @@ Requests are automatically cancelled if their timeout is exceeded (by default 5 
 
 You can customize the timeout in the handle builders, just after the cooldown.
 
-```typescript
+```tsx
 const handle = XSWR.useSingle(
   "/api/hello",
   fetchAsJson,
@@ -24,7 +24,7 @@ Automatic cancellation is opt-in, you have to prepare your fetcher for abortion.
 
 You can pass the AbortSignal to your fetcher (e.g. fetch) in order to cancel the request and throw an error when the signal is triggered.
 
-```typescript
+```tsx
 async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
   const { signal } = more
 
@@ -35,7 +35,7 @@ async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
 
 You can then ignore AbortErrors in your components.
 
-```typescript
+```tsx
 if (XSWR.isAbortError(handle.error))
   // do not display the error
 else
@@ -48,7 +48,7 @@ By default, an aborter is created and passed to your handle for each request.
 
 You can use `handle.aborter.abort` to abort the ongoing request, or `handle.aborter.signal` to check the signal.
 
-```typescript
+```tsx
 const mydata = useMyData()
 const { aborter } = mydata
 
@@ -65,7 +65,7 @@ Note: `handle.aborter` will only be available after a render, use a custom abort
 
 For more control, you can create your own aborter and store it wherever you like (e.g. is a useRef) and trigger it whenever you like.
 
-```typescript
+```tsx
 const mydata = useMyData()
 const { fetch } = mydata
 

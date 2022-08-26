@@ -10,7 +10,7 @@ Basically, the fetch is prevented if `Date.now() - state.time < cooldown`, where
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 

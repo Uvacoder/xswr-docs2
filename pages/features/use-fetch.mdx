@@ -2,13 +2,13 @@
 
 You can use `useFetch` to fetch a resource on mount and on key change.
 
-```typescript
+```tsx
 XSWR.useMount(handle) 
 ```
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -20,7 +20,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useFetch(handle: Handle) {
   const { fetch } = handle
 

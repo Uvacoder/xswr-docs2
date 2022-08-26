@@ -10,7 +10,7 @@ Basically, a resource is garbage collected if there are no more references to it
 
 This will set an expiration delay of 60 seconds.
 
-```typescript
+```tsx
 async function fetchAsJson<T>(url: string) {
   const res = await fetch(url)
   if (!res.ok) throw new Error(await res.text())

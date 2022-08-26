@@ -2,7 +2,7 @@
 
 You can use `useFallback` to display static or server-side data before the request is finished.
 
-```typescript
+```tsx
 XSWR.useFallback(handle, state) 
 ```
 
@@ -10,7 +10,7 @@ XSWR.useFallback(handle, state)
 
 When using a Next.js like component
 
-```typescript
+```tsx
 function useMyData(init?: MyData) {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -33,7 +33,7 @@ function MyApp(props: MyAppProps) {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useFallback<D = any, E = any>(
   handle: Handle<D, E>,
   state?: State<D, E>

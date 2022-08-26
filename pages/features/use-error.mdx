@@ -2,7 +2,7 @@
 
 You can use `useError` to call a function on error.
 
-```typescript
+```tsx
 XSWR.useError(handle, onerror) 
 ```
 
@@ -12,7 +12,7 @@ You want to disconnect a user when you receive a HTTP 401 (Unauthorized) error.
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -25,7 +25,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useError<D = any, E = any>(
   handle: Handle<D, E>,
   callback: (e: E) => void

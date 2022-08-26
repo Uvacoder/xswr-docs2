@@ -12,7 +12,7 @@ npm i @hazae41/xswr
 
 You just have to wrap your app in a `XSWR.CoreProvider` component.
 
-```typescript
+```tsx
 function MyWrapper() {
   return <XSWR.CoreProvider>
     <MyAwesomeApp />
@@ -30,7 +30,7 @@ This shows a simple and complete way of doing a request on `/api/data` using JSO
 
 Create a fetcher for your request
 
-```typescript
+```tsx
 async function fetchAsJson<T>(url: string) {
   const res = await fetch(url)
   const data = await res.json() as T
@@ -40,7 +40,7 @@ async function fetchAsJson<T>(url: string) {
 
 Then create your hook using `useSingle` (or `useScroll`) and some other hooks you like
 
-```typescript
+```tsx
 interface MyData {}
 
 function useMyData() {
@@ -64,7 +64,7 @@ function useMyData() {
 
 Now you can use it in your component
 
-```typescript
+```tsx
 function MyApp() {
   const mydata = useMyData()
 

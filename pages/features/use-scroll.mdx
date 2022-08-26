@@ -2,7 +2,7 @@
 
 You can use `useScroll` to scroll through a cursor-based resource.
 
-```typescript
+```tsx
 XSWR.useScroll(scroller, fetcher, cooldown?, timeout?)
 ```
 
@@ -10,7 +10,7 @@ XSWR.useScroll(scroller, fetcher, cooldown?, timeout?)
 
 A scroller function uses the previous page data and returns the next page key.
 
-```typescript
+```tsx
 type Scroller<D = any, K = any> = (previous?: D) => K | undefined
 ```
 
@@ -18,7 +18,7 @@ The scroller must be memoized as it acts like a key, you can create one with a `
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const scroller = useCallback((previous?: MyData) => {
     if (!previous)

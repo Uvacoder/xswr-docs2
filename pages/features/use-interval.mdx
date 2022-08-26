@@ -2,7 +2,7 @@
 
 You can use `useInterval` to fetch a resource on a regular interval.
 
-```typescript
+```tsx
 XSWR.useInterval(handle, 1000) 
 ```
 
@@ -12,7 +12,7 @@ You know that some data is regularly updated.
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -25,7 +25,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useInterval(handle: Handle, interval: number) {
   const { fetch } = handle
 

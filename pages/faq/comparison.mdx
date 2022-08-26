@@ -4,19 +4,19 @@
 
 ### xswr
 
-```typescript
+```tsx
 user.fetch()
 ```
 
 ### swr
 
-```typescript
+```tsx
 mutate('/api/user', fetch('/api/user').then(res => res.json()))
 ```
 
 ### react-query
 
-```typescript
+```tsx
 await queryClient.prefetchQuery(['user'], fetchUser)
 ```
 
@@ -24,19 +24,19 @@ await queryClient.prefetchQuery(['user'], fetchUser)
 
 ### xswr
 
-```typescript
+```tsx
 todos.update(old => [...old, todo])
 ```
 
 ### swr
 
-```typescript
+```tsx
 mutate('/api/todos', updateFn(user), { optimisticData: user, rollbackOnError: true })
 ```
 
 ### react-query
 
-```typescript
+```tsx
 useMutation(updateTodo, {
   onMutate: async newTodo => {
     await queryClient.cancelQueries(['todos'])
@@ -57,7 +57,7 @@ useMutation(updateTodo, {
 
 ### xswr
 
-```typescript
+```tsx
 user.aborter.abort()
 ```
 
@@ -67,7 +67,7 @@ Unsupported.
 
 ### react-query
 
-```typescript
+```tsx
 queryClient.cancelQueries(['todos'])
 ```
 

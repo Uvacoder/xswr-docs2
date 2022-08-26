@@ -14,7 +14,7 @@ You can, for example, do a `POST` request when the extra `data` parameter is pas
 
 ### Example 
 
-```typescript
+```tsx
 async function postAsJson<T>(url: string, more: XSWR.PosterMore<T>) {
   const { data, signal } = more
 
@@ -61,7 +61,7 @@ export function MyApp() {
 
 ### Implementation
 
-```typescript
+```tsx
 async update<D = any, E = any, K = any>(
   key: K | undefined,
   skey: string | undefined,

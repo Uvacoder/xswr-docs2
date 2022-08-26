@@ -2,13 +2,13 @@
 
 You can use `useVisible` to fetch a resource when the tab is focused.
 
-```typescript
+```tsx
 XSWR.useVisible(handle) 
 ```
 
 ### Example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -21,7 +21,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export function useVisible(handle: Handle) {
   const { fetch } = handle
 

@@ -2,7 +2,7 @@
 
 You can use `useRetry` to retry on error using the exponential backoff algorithm.
 
-```typescript
+```tsx
 XSWR.useRetry(handle, { init: 1000, base: 2, max: 3 }) 
 ```
 
@@ -30,7 +30,7 @@ The count is reset when a retry succeeds.
 
 ### Usage example
 
-```typescript
+```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
@@ -43,7 +43,7 @@ function useMyData() {
 
 ### Implementation
 
-```typescript
+```tsx
 export interface RetryOptions {
   init?: number
   base?: number
