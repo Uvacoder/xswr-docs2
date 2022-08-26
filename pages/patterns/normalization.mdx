@@ -1,0 +1,126 @@
+# Resource normalization
+
+## Centralized handles
+
+If you use a resource multiple times, you should definitely put it in a central place.
+
+`/hooks/mydata.tsx`
+
+```typescript
+export function useMyData() {
+  const handle = XSWR.useSingle<MyData>("/api/hello", fetchAsJson)
+  XSWR.useFetch(handle)
+  XSWR.useVisible(handle)
+  XSWR.useOnline(handle)
+  return handle
+}
+```
+
+Then use it in your components
+
+`/comps/mypage.tsx`
+
+```typescript
+import { useMyData } from "hooks/mydata.tsx"
+
+export function MyPage() {
+  const { data, error, loading } = useMyData()
+
+  // Do some stuff
+
+  if (error)
+    return <Error error={error} />
+  if (!data)
+    return <Loading />
+  return <>{JSON.stringify(data)}</>
+}
+```
+
+`/comps/mycard.tsx`
+
+```typescript
+import { useMyData } from "hooks/mydata.tsx"
+
+export function MyCard() {
+  const { data, error, loading } = useMyData()
+
+  // Do some other stuff
+
+  if (error)
+    return <Error error={error} />
+  if (loading)
+    return <Loading />
+  return <>{JSON.stringify(data)}</>
+}
+```
+
+### Naked handles
+
+You can use a handle without any associated hook in order to prefetch, mutate, update and clear a resource without using it in your component.
+
+`/hooks/mydata.tsx`
+
+```typescript
+export function useMyDataNaked() {
+  return XSWR.useSingle<MyData>("/api/hello", fetchAsJson)
+}
+```
+
+You can then use this naked handle in your full handle.
+
+`/hooks/mydata.tsx`
+
+```typescript
+export function useMyData() {
+  const handle = useMyDataNaked()
+  XSWR.useFetch(handle)
+  XSWR.useVisible(handle)
+  XSWR.useOnline(handle)
+  return handle
+}
+```
+
+Use the naked handle for e.g. prefetching, mutating, or updating.
+
+`/comps/mybutton.tsx`
+
+```typescript
+import { useMyDataNaked } from "hooks/mydata.tsx"
+
+export function MyButton() {
+  // By using a naked handle, the resource won't be fetched until onHover is called
+  const { fetch } = useMyDataNaked()
+
+  const onHover = useCallback(() => {
+    fetch() // <-- prefetch
+  }, [fetch])
+
+  const onClick = useCallback(() => {
+    router.push("/mypage")
+  }, [])
+
+  return <Button onHover={onHover}>
+    Click me
+  </Button>
+}
+```
+
+Then in your page, consume the full handle for displaying.
+
+`/comps/mypage.tsx`
+
+```typescript
+import { useMyData } from "hooks/mydata.tsx"
+
+export function MyPage() {
+  const { data, error, loading } = useMyData()
+
+  if (error)
+    return <Error error={error} />
+  if (!data)
+    return <Loading />
+  return <>{JSON.stringify(data)}</>
+}
+```
+
+This way, you only have to modify the key or fetcher in a single place.
