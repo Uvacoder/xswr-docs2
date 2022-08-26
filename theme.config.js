@@ -1,6 +1,6 @@
 export default {
   github: 'https://github.com/hazae41/xswr',
-  docsRepositoryBase: 'https://github.com/hazae41/xswr/blob/docs',
+  docsRepositoryBase: 'https://github.com/hazae41/xswr-docs',
   titleSuffix: " – XSWR",
   logo: (
     <>
