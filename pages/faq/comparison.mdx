@@ -75,7 +75,7 @@ queryClient.cancelQueries(['todos'])
 
 ### xswr
 
-Per-fetch expiration time. You can use response headers like `Cache-Control` to set an expiration time.
+Global, per-query, and per-fetch expiration time. You can use response headers like `Cache-Control` to set an expiration time.
 
 ### swr
 
@@ -83,4 +83,4 @@ Unsupported.
 
 ### react-query
 
-Global or per-query expiration time. You must define an expiration time at global scope or query scope.
+Global and per-query expiration time. You must define an expiration time at global scope or query scope.
