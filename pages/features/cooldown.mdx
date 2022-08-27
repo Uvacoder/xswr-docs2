@@ -10,12 +10,26 @@ Basically, the fetch is prevented if `Date.now() - state.time < cooldown`, where
 
 ### Example
 
+You can set an cooldown delay for all resources in your core provider.
+
+```tsx
+function MyWrapper() {
+  return <XSWR.CoreProvider
+    timeout={5000}>
+    <MyAwesomeApp />
+  </XSWR.CoreProvider>
+}
+```
+
+Or you can set an cooldown delay for some resource.
+
 ```tsx
 function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
     fetchAsJson,
-    5000) // <--- your custom cooldown
+    { timeout: 5000 })
+
   XSWR.useFetch(handle)
   return handle
 }

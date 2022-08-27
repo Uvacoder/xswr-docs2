@@ -6,19 +6,32 @@ You can cancel requests by using AbortControllers.
 
 Requests are automatically cancelled if their timeout is exceeded (by default 5 seconds).
 
-You can customize the timeout in the handle builders, just after the cooldown.
+You can set an timeout delay for all resources in your core provider.
 
 ```tsx
-const handle = XSWR.useSingle(
-  "/api/hello",
-  fetchAsJson,
-  1000,
-  5000) // <-- here
-XSWR.useFetch(handle)
-return handle
+function MyWrapper() {
+  return <XSWR.CoreProvider
+    timeout={5000}>
+    <MyAwesomeApp />
+  </XSWR.CoreProvider>
+}
 ```
 
-Automatic cancellation is opt-in, you have to prepare your fetcher for abortion.
+Or you can set an timeout delay for some resource.
+
+```tsx
+function useMyData() {
+  const handle = XSWR.useSingle<MyData>(
+    `/api/hello`, 
+    fetchAsJson,
+    { timeout: 5000 })
+
+  XSWR.useFetch(handle)
+  return handle
+}
+```
+
+You have to prepare your fetcher for abortion in order to use automatic cancellation.
 
 ## Preparing your fetcher for abortion
 
@@ -29,7 +42,8 @@ async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
-  return { data: await res.json() as T }
+  const data = await res.json() as T
+  return { data }
 }
 ```
 
