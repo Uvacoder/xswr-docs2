@@ -28,7 +28,7 @@ function useMyData() {
   const handle = XSWR.useSingle<MyData>(
     `/api/hello`, 
     fetchAsJson,
-    { timeout: 5000 })
+    { cooldown: 5000 })
 
   XSWR.useFetch(handle)
   return handle
