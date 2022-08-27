@@ -8,7 +8,7 @@ You can pass a custom cooldown to both `useSingle` and `useScroll` to override o
 
 Basically, the fetch is prevented if `Date.now() - state.time < cooldown`, where state.time is the last time a resource was mutated.
 
-### Example
+### Resource cooldown delay
 
 You can set an cooldown delay for all resources in your core provider.
 
@@ -32,6 +32,21 @@ function useMyData() {
 
   XSWR.useFetch(handle)
   return handle
+}
+```
+
+### Response cooldown time
+
+You can also set a cooldown time directly in your fetcher.
+
+```tsx
+async function fetchAsJson<T>(url: string) {
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(await res.text())
+
+  const data = await res.json() as T
+  const cooldown = Date.now() + 5000
+  return { data, cooldown }
 }
 ```
 
