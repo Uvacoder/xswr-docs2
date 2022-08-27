@@ -13,5 +13,5 @@
   "cooldown": "Deduplication cooldown",
   "optimistic": "Optimistic updates",
   "abortion": "Cancellable requests",
-  "garbage": "Automatic garbage collection"
+  "garbage": "Garbage collection"
 }
