@@ -50,6 +50,10 @@ async function fetchAsJson<T>(url: string) {
 }
 ```
 
+For more control, `cooldown` is a time, not a delay (you must add `Date.now()` if you use a delay).
+
+You can also use response headers like `Cache-Control` to set the cooldown time accordingly.
+
 ### Tips
 
 You can trick the deduplication process by passing a custom `state.time` in `mutate()`.
