@@ -55,7 +55,7 @@ Now you can use it in your component
 
 ```tsx
 function MyApp() {
-  const { error, data } = useMyData()
+  const { data, error } = useMyData()
 
   if (error)
     return <MyError error={error} />
