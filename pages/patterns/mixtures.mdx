@@ -110,21 +110,17 @@ export function useDogFetchAndDebugMix(id: string) {
 
 You can also combine this pattern with the [schema pattern](/patterns/schemas).
 
-`mixtures.tsx`
+`mixtures.tsx` (same as previous example)
 
 ```tsx
-export function useAutoFetchMixture(schema: XSWR.Schema) {
-  const handle = XSWR.use(schema)
-
+export function useAutoFetchMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
   XSWR.useVisible(handle)
   XSWR.useOnline(handle)
   return handle
 }
 
-export function useFetchAndDebugMixture(schema: XSWR.Schema, label: string) {
-  const handle = XSWR.use(schema)
-
+export function useFetchAndDebugMixture(handle: XSWR.Handle, label: string) {
   XSWR.useFetch(handle)
   XSWR.useDebug(handle, label)
   return handle
@@ -139,11 +135,13 @@ export function getCatSchema(id: string) {
 }
 
 export function useCatAutoFetchMix(id: string) {
-  return useAutoFetchMixture(getCatSchema(id))
+  const handle = XSWR.use(getCatSchema, [id])
+  return useAutoFetchMixture(handle)
 }
 
 export function useCatFetchAndDebugMix(id: string) {
-  return useFetchAndDebugMixture(getCatSchema(id), `cat#${id}`)
+  const handle = XSWR.use(getCatSchema, [id])
+  return useFetchAndDebugMixture(handle, `cat#${id}`)
 }
 ```
 
@@ -155,10 +153,12 @@ export function getDogSchema(id: string) {
 }
 
 export function useDogAutoFetchMix(id: string) {
-  return useAutoFetchMixture(getDogSchema(id))
+  const handle = XSWR.use(getDogSchema, [id])
+  return useAutoFetchMixture(handle)
 }
 
 export function useDogFetchAndDebugMix(id: string) {
-  return useFetchAndDebugMixture(getDogSchema(id), `dog#${id}`)
+  const handle = XSWR.use(getDogSchema, [id])
+  return useFetchAndDebugMixture(handle, `dog#${id}`)
 }
 ```

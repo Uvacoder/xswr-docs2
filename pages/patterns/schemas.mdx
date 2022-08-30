@@ -10,11 +10,13 @@ function getCatSchema(id: string) {
 
 ## Hooks 
 
-You can use a schema in a hook with `XSWR.use(schema)`. 
+You can use a schema in a hook with `XSWR.use(factory, deps)`. 
+
+Note: deps will be passed to the factory.
 
 ```tsx
 function useCat(id: string) {
-  const handle = XSWR.use(getCatSchema(id))
+  const handle = XSWR.use(getCatSchema, [id])
 
   XSWR.useFetch(handle)
   return handle
@@ -25,7 +27,7 @@ Example using the [mixture pattern](/patterns/mixtures).
 
 ```tsx
 function useCatBase(id: string) {
-  return XSWR.use(getCatSchema(id))
+  return XSWR.use(getCatSchema, [id])
 }
 
 function useCatMix(id: string) {
