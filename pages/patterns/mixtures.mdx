@@ -113,7 +113,7 @@ You can also combine this pattern with the [schema pattern](/patterns/schemas).
 `mixtures.tsx`
 
 ```tsx
-export function useAutoFetchMix(schema: XSWR.Schema) {
+export function useAutoFetchMixture(schema: XSWR.Schema) {
   const handle = XSWR.use(schema)
 
   XSWR.useFetch(handle)
@@ -122,7 +122,7 @@ export function useAutoFetchMix(schema: XSWR.Schema) {
   return handle
 }
 
-export function useFetchAndDebugMix(schema: XSWR.Schema, label: string) {
+export function useFetchAndDebugMixture(schema: XSWR.Schema, label: string) {
   const handle = XSWR.use(schema)
 
   XSWR.useFetch(handle)
@@ -139,11 +139,11 @@ export function getCatSchema(id: string) {
 }
 
 export function useCatAutoFetchMix(id: string) {
-  return useAutoFetchMix(getCatSchema(id))
+  return useAutoFetchMixture(getCatSchema(id))
 }
 
 export function useCatFetchAndDebugMix(id: string) {
-  return useFetchAndDebugMix(getCatSchema(id), `cat#${id}`)
+  return useFetchAndDebugMixture(getCatSchema(id), `cat#${id}`)
 }
 ```
 
