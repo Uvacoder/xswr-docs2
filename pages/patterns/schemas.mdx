@@ -1,0 +1,67 @@
+# Defining schemas
+
+You can define a schema for a resource in order to use it in multiple hooks AND make objects from it.
+
+```tsx
+function getCatSchema(id: string) {
+  return XSWR.single(["/api/cat", id], fetchAsJson)
+}
+```
+
+## Hooks 
+
+You can use a schema in a hook with `XSWR.use(schema)`. 
+
+```tsx
+function useCat(id: string) {
+  const handle = XSWR.use(getCatSchema(id))
+
+  XSWR.useFetch(handle)
+  return handle
+}
+```
+
+Example using the [mixture pattern](/patterns/mixtures).
+
+```tsx
+function useCatBase(id: string) {
+  return XSWR.use(getCatSchema(id))
+}
+
+function useCatMix(id: string) {
+  const handle = useCatBase(id)
+  return useAutoFetchMixture(handle)
+}
+```
+
+## Objects
+
+You can also instanciate this schema without using its hook in order to fetch or mutate it.
+
+You can either call `schema.make(core, params)` from non-React world.
+
+```tsx
+function mutateSomeCat(id: string, core: XSWR.Core, params: XSWR.Params) {
+  const object = getCatSchema(id).make(core, params)
+  await object.mutate({ data: "hello world" })
+  await object.fetch()
+}
+```
+
+Or use `useXSWR().make(schema)` from a component to pass `core` and `params` automatically.
+
+```tsx
+function SomeButton() {
+  const { make } = XSWR.useXSWR()
+
+  const doSomething = useCallback(async () => {
+    const object = make(getCatSchema("123"))
+    await object.mutate({ data: "hello world" })
+    await object.fetch()
+  }, [make])
+
+  return <button onClick={doSomething}>
+    Click me
+  </button>
+}
+```

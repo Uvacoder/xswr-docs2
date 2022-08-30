@@ -1,0 +1,70 @@
+# Cascading parameters
+
+If you often reuse the same parameters in your schemas, you should consider using `XSWR.ParamsProvider`.
+
+```tsx
+return <XSWR.ParamsProvider
+  cooldown={5000}
+  timeout={5000}
+  expiration={-1}
+  storage={...}
+  equals={...}
+  serializer={...}>
+  // ...
+</XSWR.ParamsProvider>
+```
+
+Each provider merges its parameters with those of its parent (or CoreProvider).
+
+```tsx
+CoreProvider({ cooldown: 5000 })
+├─ useHelloData() // { cooldown: 5000 }
+└┬ ParamsProvider({ cooldown: 1000 })
+ └┬ useSomeData({ cooldown: 0 }) // { cooldown: 0 }
+  └┬ ParamsProvider({ expiration: 60*1000 })
+   └─ useSomeOtherData() // { cooldown: 1000, expiration: 60*1000 }
+```
+
+## Example
+
+Here, both `useCats` and `useDogs` will get their parameters from ParamsProvider.
+
+```tsx
+function Animals() {
+  return <XSWR.ParamsProvider
+    cooldown={5000}
+    timeout={5000}>
+    <Cats />
+    <Dogs />
+  </XSWR.ParamsProvider>
+}
+
+function useCats() {
+  const handle = XSWR.useSingle(
+    "/api/cats",
+    fetchAsJson,
+    { cooldown: 1000 }) // <- Override ParamsProvider's cooldown
+  XSWR.useFetch(handle)
+  return handle
+}
+
+export function Cats() {
+  const { data } = useCats()
+
+  return <>/*...*/</>
+}
+
+function useDogs() {
+  const handle = XSWR.useSingle(
+    "/api/dogs", 
+    fetchAsJson)
+  XSWR.useFetch(handle)
+  return handle
+}
+
+export function Dogs() {
+  const { data } = useDogs()
+
+  return <>/*...*/</>
+}
+```

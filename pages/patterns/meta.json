@@ -1,3 +1,6 @@
 {
-  "centralization": "Resource centralization"
+  "centralize": "Centralizing resources",
+  "cascade": "Cascading parameters",
+  "mixtures": "Mixes and mixtures",
+  "schemas": "Defining schemas"
 }
