@@ -7,7 +7,7 @@ You can create a persistent storage and use it only where you want.
 Create a storage either at top-level...
 
 ```tsx
-const storage = new XSWR.AsyncLocalStorage()
+const storage = new XSWR.IDBStorage("mydb")
 
 function useHello() {
   const handle = XSWR.useSingle(
@@ -24,7 +24,7 @@ function useHello() {
 
 ```tsx 
 function useHello() {
-  const storage = XSWR.useAsyncLocalStorage()
+  const storage = XSWR.useIDBStorage("mydb")
   
   const handle = XSWR.useSingle(
     "/api/hello", 
@@ -36,10 +36,10 @@ function useHello() {
 }
 ```
 
-You can also pass it into a CoreProvider or ParamsProvider.
+You can also pass it into a CoreProvider or ParamsProvider to enable persistent storage for all children.
 
 ```tsx
-const storage = new XSWR.AsyncLocalStorage()
+const storage = new XSWR.IDBStorage("mydb")
 
 function MyWrapper() {
   return <XSWR.CoreProvider
@@ -51,14 +51,32 @@ function MyWrapper() {
 
 ## Types of storage
 
-### Async Local Storage
+### IDBStorage
+
+- Constructor: `new XSWR.IDBStorage(name)`
+- Hook (static): `useIDBStorage(name)`
+
+This storage is asynchronous and uses the browser IndexedDB.
+
+IDBStorage is the best storage you can use:
+- it's compatible with SSR
+- it can store very large objects with complex graphs
+- it doesn't need a serializer
+
+Warning: Being asynchronous allows the use of SSR, but it won't display data on first render.
+
+If you want to display data on first render, you can do so by using either:
+- SyncLocalStorage
+- useFallback()
+
+### AsyncLocalStorage
 
 - Constructor: `new XSWR.AsyncLocalStorage(serializer?)`
 - Hook (static): `useAsyncLocalStorage(serializer?)`
 
 This storage is asynchronous and uses the browser LocalStorage.
 
-Being asynchronous allows the use of SSR and storing large objects, but it won't display data on first render.
+Being asynchronous allows the use of SSR, but it won't display data on first render.
 
 If you want to display data on first render, you can do so by using either:
 - SyncLocalStorage
@@ -66,13 +84,13 @@ If you want to display data on first render, you can do so by using either:
 
 You can pass a custom serializer (default is JSON) for serializing values (keys are already serialized by the `Params` serializer).
 
-### Sync Local Storage
+### SyncLocalStorage
 
 - Constructor: `new XSWR.SyncLocalStorage(serializer?)`
 - Hook (static): `useSyncLocalStorage(serializer?)`
 
 This storage is synchronous and uses the browser LocalStorage.
 
-Being synchronous allows displaying data on first render, but it won't work with SSR or for storing large objects.
+Being synchronous allows displaying data on first render, but it won't work with SSR.
 
 You can pass a custom serializer (default is JSON) for serializing values (keys are already serialized by the `Params` serializer).
