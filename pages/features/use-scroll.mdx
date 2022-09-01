@@ -1,10 +1,20 @@
 # Cursor-based pagination
 
-You can use `useScroll` to scroll through a cursor-based resource.
+You can use scroll to scroll through a cursor-based resource.
+
+```tsx
+XSWR.scroll(scroller, fetcher, cooldown?, timeout?)
+```
 
 ```tsx
 XSWR.useScroll(scroller, fetcher, cooldown?, timeout?)
 ```
+
+### Behaviour
+
+`handle.scroll()` will fetch the next page.
+
+`handle.fetch()` will fetch the first page (next pages will be discarded if the first page changed).
 
 ### Scroller function
 
@@ -14,28 +24,25 @@ A scroller function uses the previous page data and returns the next page key.
 type Scroller<D = any, K = any> = (previous?: D) => K | undefined
 ```
 
-The scroller must be memoized as it acts like a key, you can create one with a `useCallback` or use a top-level function.
+If you use `useScroll`, the scroller must be memoized as it acts like a key, you can create one with a `useCallback` or use a top-level function.
 
 ### Example
 
 ```tsx
-function useMyData() {
-  const scroller = useCallback((previous?: MyData) => {
+function getHelloSchema() {
+  return XSWR.scroll((previous?: MyData) => {
     if (!previous)
       return `/api/hello` // <--- no previous data = first page
     if (!previous.after)
       return undefined // <--- no after cursor = last page
     return `/api/hello?after=${previous.after}`
-  }, [])
+  }, fetchAsJson)
+}
 
-  const handle = XSWR.useScroll<MyData>(
-    scroller, 
-    fetchAsJson)
-  XSWR.useFetch(handle) // <-- all hooks are compatible with useScroll
+function useHello() {
+  const handle = XSWR.use(getHelloSchema, [])
+
+  XSWR.useFetch(handle) // <-- all blocks are compatible
   return handle
 }
 ```
-
-`handle.scroll()` will fetch the next page.
-
-`handle.refetch()` will refetch the first page (next pages will be discarded if the first page changed).

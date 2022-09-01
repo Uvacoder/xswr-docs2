@@ -22,14 +22,8 @@ function MyWrapper() {
 Or you can set an expiration delay for some resource.
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson,
-    { expiration: 60 * 1000 })
-
-  XSWR.useFetch(handle)
-  return handle
+function getHelloSchema() {
+  return XSWR.single<Hello>("/api/hello", fetchAsJson, { expiration: 60 * 1000 })
 }
 ```
 
@@ -38,9 +32,11 @@ function useMyData() {
 You can also set an expiration time directly in your fetcher.
 
 ```tsx
-async function fetchAsJson<T>(url: string) {
-  const res = await fetch(url)
-  if (!res.ok) throw new Error(await res.text())
+async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+  const { signal } = more
+
+  const res = await fetch(url, { signal })
+  if (!res.ok) throw new Error()
 
   const data = await res.json() as T
   const expiration = Date.now() + (60 * 1000)

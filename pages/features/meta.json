@@ -14,5 +14,6 @@
   "optimistic": "Optimistic updates",
   "abortion": "Cancellable requests",
   "garbage": "Garbage collection",
-  "storage": "Persistent storage"
+  "storage": "Persistent storage",
+  "schemas": "Schemas and imperative code"
 }

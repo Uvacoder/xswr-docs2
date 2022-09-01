@@ -3,7 +3,7 @@
 You can use `useInterval` to fetch a resource on a regular interval.
 
 ```tsx
-XSWR.useInterval(handle, 1000) 
+XSWR.useInterval(handle, interval) 
 ```
 
 ### Motivation
@@ -13,13 +13,15 @@ You know that some data is regularly updated.
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useFetchAndIntervalMixture(handle: XSWR.Handle, interval: number) {
   XSWR.useFetch(handle)
-  XSWR.useInterval(handle, 1000)
+  XSWR.useInterval(handle, interval)
   return handle
+}
+
+function useHelloMix() {
+  const handle = XSWR.use(getHelloSchema, [])
+  return useFetchAndIntervalMixture(handle, 1000)
 }
 ```
 

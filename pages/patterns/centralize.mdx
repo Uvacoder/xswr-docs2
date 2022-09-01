@@ -2,15 +2,16 @@
 
 If you use a resource multiple times, you should definitely put it in a central place.
 
-`/hooks/mydata.tsx`
+`/hooks/hello.tsx`
 
 ```tsx
-export function useMyData() {
-  const handle = XSWR.useSingle<MyData>("/api/hello", fetchAsJson)
-  XSWR.useFetch(handle)
-  XSWR.useVisible(handle)
-  XSWR.useOnline(handle)
-  return handle
+function getHelloSchema() {
+  return XSWR.single<Hello>("/api/hello", fetchAsJson)
+}
+
+function useHelloMix() {
+  const handle = XSWR.use(getHelloSchema, [])
+  return useAutoFetchMixture(handle)
 }
 ```
 
@@ -19,10 +20,10 @@ Then use it in your components
 `/comps/mypage.tsx`
 
 ```tsx
-import { useMyData } from "hooks/mydata.tsx"
+import { useHello } from "hooks/hello.tsx"
 
 export function MyPage() {
-  const { data, error, loading } = useMyData()
+  const { data, error, loading } = useHello()
 
   // Do some stuff
 
@@ -37,10 +38,10 @@ export function MyPage() {
 `/comps/mycard.tsx`
 
 ```tsx
-import { useMyData } from "hooks/mydata.tsx"
+import { useHello } from "hooks/hello.tsx"
 
 export function MyCard() {
-  const { data, error, loading } = useMyData()
+  const { data, error, loading } = useHello()
 
   // Do some other stuff
 

@@ -1,0 +1,46 @@
+# Your first mix
+
+When using xswr and its composition-based hooks, you create a mix and only include the ingredients you want.
+
+We'll do a request at `/api/data` using JSON, display it with a loading, and automatically refetch it.
+
+## Create a fetcher ⚡️
+
+It will just take an url, fetch it, and return the data.
+
+```tsx
+async function fetchAsJson<T>(url: string) {
+  const res = await fetch(url)
+  const data = await res.json() as T
+  return { data }
+}
+```
+
+## Create a mix 🌪
+
+Then create a mix using a handle and some blocks.
+
+```tsx
+function useHello() {
+  const handle = XSWR.useSingle<Hello>(`/api/hello`, fetchAsJson)
+  
+  XSWR.useFetch(handle) // Fetch on mount and on url change
+  XSWR.useVisible(handle) // Fetch when the page becomes visible
+  XSWR.useOnline(handle) // Fetch when the browser becomes online
+  return handle
+}
+```
+
+## Use it in your components 🚀
+
+```tsx
+function MyApp() {
+  const { data, error } = useHello()
+
+  if (error)
+    return <MyError error={error} />
+  if (!data)
+    return <MyLoading />
+  return <MyPage data={data} />
+}
+```

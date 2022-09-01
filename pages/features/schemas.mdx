@@ -1,4 +1,4 @@
-# Defining schemas
+# Schemas and imperative code
 
 You can define a schema for a resource in order to use it in multiple hooks AND make objects from it.
 
@@ -8,37 +8,22 @@ function getCatSchema(id: string) {
 }
 ```
 
-## Hooks 
+## Using schemas in hooks 
 
 You can use a schema in a hook with `XSWR.use(factory, deps)`. 
 
-Note: deps will be passed to the factory.
+It works like useMemo, but deps will be passed to the factory.
 
 ```tsx
 function useCat(id: string) {
   const handle = XSWR.use(getCatSchema, [id])
-
-  XSWR.useFetch(handle)
-  return handle
-}
-```
-
-Example using the [mixture pattern](/patterns/mixtures).
-
-```tsx
-function useCatBase(id: string) {
-  return XSWR.use(getCatSchema, [id])
-}
-
-function useCatMix(id: string) {
-  const handle = useCatBase(id)
   return useAutoFetchMixture(handle)
 }
 ```
 
-## Objects
+## Making objects from schemas
 
-You can also instanciate this schema without using its hook in order to fetch or mutate it.
+You can also instanciate a schema in order to fetch or mutate it.
 
 You can either call `schema.make(core, params)` from non-React world.
 

@@ -3,16 +3,15 @@
 You can use `useFetch` to fetch a resource on mount and on key change.
 
 ```tsx
-XSWR.useMount(handle) 
+XSWR.useFetch(handle) 
 ```
 
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useHello() {
+  const handle = XSWR.use(getHelloSchema, [])
+
   XSWR.useFetch(handle)
   return handle
 }

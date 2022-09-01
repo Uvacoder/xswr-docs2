@@ -9,30 +9,27 @@ Create a storage either at top-level...
 ```tsx
 const storage = new XSWR.IDBStorage("mydb")
 
-function useHello() {
-  const handle = XSWR.useSingle(
-    "/api/hello", 
-    fetchAsJson, 
-    { storage })
+function getHelloSchema(storage?: XSWR.Storage) {
+  return XSWR.single<Hello>("/api/hello", fetchAsJson, { storage })
+}
 
-  XSWR.useFetch(handle)
-  return handle
+function useHelloMix() {
+  const handle = XSWR.use(getHelloSchema, [storage])
+  return useAutoFetchMixture(handle)
 }
 ```
 
 ...or using a hook.
 
-```tsx 
-function useHello() {
-  const storage = XSWR.useIDBStorage("mydb")
-  
-  const handle = XSWR.useSingle(
-    "/api/hello", 
-    fetchAsJson, 
-    { storage })
+```tsx
+function getHelloSchema(storage?: XSWR.Storage) {
+  return XSWR.single("/api/hello", fetchAsJson, { storage })
+}
 
-  XSWR.useFetch(handle)
-  return handle
+function useHelloMix() {
+  const storage = XSWR.useIDBStorage("mydb")
+  const handle = XSWR.use(getHelloSchema, [storage])
+  return useAutoFetchMixture(handle)
 }
 ```
 

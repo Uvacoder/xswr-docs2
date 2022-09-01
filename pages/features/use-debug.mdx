@@ -9,13 +9,15 @@ XSWR.useDebug(handle, label)
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
-  XSWR.useFetch(handle)
-  XSWR.useDebug(handle, "my data")
+function useFetchAndDebugMixture(handle: XSWR.Handle, label: string) {
+  XSWR.useFetch(handle
+  XSWR.useDebug(handle, label)
   return handle
+}
+
+function useHelloMix() {
+  const handle = XSWR.use(getHelloSchema, [])
+  return useFetchAndDebugMixture(handle, label)
 }
 ```
 

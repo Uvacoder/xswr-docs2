@@ -20,14 +20,8 @@ function MyWrapper() {
 Or you can set an timeout delay for some resource.
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson,
-    { timeout: 5000 })
-
-  XSWR.useFetch(handle)
-  return handle
+function getHelloSchema() {
+  return XSWR.single<Hello>("/api/hello", fetchAsJson, { timeout: 5000 })
 }
 ```
 
@@ -37,11 +31,15 @@ You have to prepare your fetcher for abortion in order to use automatic cancella
 
 You can pass the AbortSignal to your fetcher (e.g. fetch) in order to cancel the request and throw an error when the signal is triggered.
 
+The signal will be passed in the second parameter of your fetcher (`FetcherMore`).
+
 ```tsx
 async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
+  if (!res.ok) throw new Error()
+
   const data = await res.json() as T
   return { data }
 }
@@ -80,18 +78,23 @@ Note: `handle.aborter` will only be available after a render, use a custom abort
 For more control, you can create your own aborter and store it wherever you like (e.g. is a useRef) and trigger it whenever you like.
 
 ```tsx
-const mydata = useMyData()
-const { fetch } = mydata
+function Component() {
+  const mydata = useMyData()
+  const { fetch } = mydata
 
-const syncAborter = useRef<AbortController>()
+  const syncAborter = useRef<AbortController>()
 
-const fetchWithAborter = useCallback(() => {
-  const aborter = new AbortController()
-  fetch(aborter)
+  const fetchWithAborter = useCallback(() => {
+    const aborter = new AbortController()
 
-  // your aborter will be available instantly
-  syncAborter.current = aborter
-}, [])
+    fetch(aborter)
+
+    // your aborter will be available instantly
+    syncAborter.current = aborter
+  }, [])
+
+  return <>...</>
+}
 ```
 
 Note: `handle.aborter` will be set to your custom aborter, even for other components in the tree.

@@ -17,10 +17,9 @@ Will still try to fetch if there is an error.
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useHelloOnce() {
+  const handle = XSWR.use(getHelloSchema, [])
+
   XSWR.useOnce(handle)
   return handle
 }

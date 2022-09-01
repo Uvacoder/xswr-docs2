@@ -13,10 +13,7 @@ You want to disconnect a user when you receive a HTTP 401 (Unauthorized) error.
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useFetchAndLogErrorMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
   XSWR.useError(handle, console.error)
   return handle

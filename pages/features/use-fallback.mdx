@@ -11,23 +11,21 @@ XSWR.useFallback(handle, state)
 When using a Next.js like component
 
 ```tsx
-function useMyData(init?: MyData) {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useFetchAndFallbackMixture<T>(handle: XSWR.Handle<T>, fallback?: T) {
   XSWR.useFetch(handle)
-  XSWR.useFallback(handle, { data: init })
+  XSWR.useFallback(handle, { data: fallback })
   return handle
 }
 
-interface MyAppProps {
-  init?: MyData
+function useHelloMix(fallback?: MyData) {
+  const handle = XSWR.use(getHelloSchema, [])
+  return useFetchAndFallbackMixture(handle, fallback)
 }
 
-function MyApp(props: MyAppProps) {
-  const mydata = useMyData(props.init)
+function MyPage(props: { fallback?: Hello }) {
+  const { data, error } = useHelloMix(props.fallback)
 
-  return ...
+  return <>...</>
 }
 ```
 

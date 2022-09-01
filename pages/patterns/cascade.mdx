@@ -1,6 +1,6 @@
 # Cascading parameters
 
-If you often reuse the same parameters in your schemas, you should consider using `XSWR.ParamsProvider`.
+If you often reuse the same parameters, you should consider passing them to a `XSWR.ParamsProvider`.
 
 ```tsx
 return <XSWR.ParamsProvider
@@ -18,11 +18,11 @@ Each provider merges its parameters with those of its parent (or CoreProvider).
 
 ```tsx
 CoreProvider({ cooldown: 5000 })
-├─ useHelloData() // { cooldown: 5000 }
+├─ useHelloMix() // { cooldown: 5000 }
 └┬ ParamsProvider({ cooldown: 1000 })
- └┬ useSomeData({ cooldown: 0 }) // { cooldown: 0 }
+ └┬ useSomeMix({ cooldown: 0 }) // { cooldown: 0 }
   └┬ ParamsProvider({ expiration: 60*1000 })
-   └─ useSomeOtherData() // { cooldown: 1000, expiration: 60*1000 }
+   └─ useSomeOtherMix() // { cooldown: 1000, expiration: 60*1000 }
 ```
 
 ## Example

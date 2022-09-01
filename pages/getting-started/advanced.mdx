@@ -1,0 +1,69 @@
+# Advanced example
+
+Last example was good, but here is the best way to use XSWR.
+
+## Making our fetcher cancellable ⚡️
+
+Our fetcher was good, but this one can be [aborted](/features/abortion).
+
+```tsx
+async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+  const { signal } = more
+
+  const res = await fetch(url, { signal })
+  if (!res.ok) throw new Error()
+
+  const data = await res.json() as T
+  return { data }
+}
+```
+
+## Defining schemas 📐
+
+Using [schemas](/features/schemas) may seems boilerplate, but it will save you a lot of time later.
+
+```tsx
+function getHelloSchema() {
+  return XSWR.single<Hello>("/api/hello", fetchAsJson)
+}
+```
+
+It allows you to reuse the same set of key+fetcher+params in multiple places, including imperative code.
+
+## Creating mixtures 🧪
+
+The [mixtures pattern](/patterns/mixtures) allows you to reuse the same group of blocks.
+
+```tsx
+function useAutoFetchMixture(handle: XSWR.Handle) {
+  XSWR.useFetch(handle)
+  XSWR.useVisible(handle)
+  XSWR.useOnline(handle)
+  return handle
+}
+```
+
+## Mixing it 🌪
+
+Once you got a schema and a mixture, you just have to mix it.
+
+```tsx
+function useHelloMix() {
+  const handle = XSWR.use(getHelloSchema, [])
+  return useAutoFetchMixture(handle)
+}
+```
+
+## Use it in your app 🚀
+
+```tsx
+function MyApp() {
+  const { data, error } = useHelloMix()
+
+  if (error)
+    return <MyError error={error} />
+  if (!data)
+    return <MyLoading />
+  return <MyPage data={data} />
+}
+```

@@ -9,11 +9,9 @@ XSWR.useOnline(handle)
 ### Example
 
 ```tsx
-function useMyData() {
-  const handle = XSWR.useSingle<MyData>(
-    `/api/hello`, 
-    fetchAsJson)
+function useAutoFetchMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
+  XSWR.useVisible(handle)
   XSWR.useOnline(handle)
   return handle
 }
