@@ -17,7 +17,8 @@ It works like useMemo, but deps are passed to the factory.
 ```tsx
 function useCat(id: string) {
   const handle = XSWR.use(getCatSchema, [id])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 ```
 

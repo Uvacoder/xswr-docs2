@@ -34,7 +34,6 @@ The count is reset when a retry succeeds.
 function useFetchAndRetryMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
   XSWR.useRetry(handle, { init: 1000, base: 2, max: 3 }) 
-  return handle
 }
 ```
 

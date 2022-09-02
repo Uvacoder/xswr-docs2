@@ -16,12 +16,12 @@ You know that some data is regularly updated.
 function useFetchAndIntervalMixture(handle: XSWR.Handle, interval: number) {
   XSWR.useFetch(handle)
   XSWR.useInterval(handle, interval)
-  return handle
 }
 
 function useHelloMix() {
   const handle = XSWR.use(getHelloSchema, [])
-  return useFetchAndIntervalMixture(handle, 1000)
+  useFetchAndIntervalMixture(handle, 1000)
+  return handle
 }
 ```
 

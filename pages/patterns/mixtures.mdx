@@ -58,20 +58,18 @@ This example is better because:
 - it combines both bases and mixtures in mixes
 - it uses [schemas](/features/schemas)
 
-`mixtures.tsx` (same as previous example)
+`mixtures.tsx`
 
 ```tsx
 export function useAutoFetchMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
   XSWR.useVisible(handle)
   XSWR.useOnline(handle)
-  return handle
 }
 
 export function useFetchAndDebugMixture(handle: XSWR.Handle, label: string) {
   XSWR.useFetch(handle)
   XSWR.useDebug(handle, label)
-  return handle
 }
 ```
 
@@ -84,12 +82,14 @@ export function getCatSchema(id: string) {
 
 export function useCatAutoFetchMix(id: string) {
   const handle = XSWR.use(getCatSchema, [id])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 
 export function useCatFetchAndDebugMix(id: string) {
   const handle = XSWR.use(getCatSchema, [id])
-  return useFetchAndDebugMixture(handle, `cat#${id}`)
+  useFetchAndDebugMixture(handle, `cat#${id}`)
+  return handle
 }
 ```
 
@@ -102,11 +102,13 @@ export function getDogSchema(id: string) {
 
 export function useDogAutoFetchMix(id: string) {
   const handle = XSWR.use(getDogSchema, [id])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 
 export function useDogFetchAndDebugMix(id: string) {
   const handle = XSWR.use(getDogSchema, [id])
-  return useFetchAndDebugMixture(handle, `dog#${id}`)
+  useFetchAndDebugMixture(handle, `dog#${id}`)
+  return handle
 }
 ```

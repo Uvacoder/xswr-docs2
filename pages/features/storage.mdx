@@ -15,7 +15,8 @@ function getHelloSchema(storage?: XSWR.Storage) {
 
 function useHelloMix() {
   const handle = XSWR.use(getHelloSchema, [storage])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 ```
 
@@ -29,7 +30,8 @@ function getHelloSchema(storage?: XSWR.Storage) {
 function useHelloMix() {
   const storage = XSWR.useIDBStorage("mydb")
   const handle = XSWR.use(getHelloSchema, [storage])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 ```
 

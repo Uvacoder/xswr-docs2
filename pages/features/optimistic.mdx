@@ -34,7 +34,8 @@ function getHelloSchema() {
 
 function useHelloMix() {
   const handle = XSWR.use(getHelloSchema, [])
-  return useAutoFetchMixture(handle)
+  useAutoFetchMixture(handle)
+  return handle
 }
 
 export function MyApp() {

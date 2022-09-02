@@ -16,7 +16,6 @@ You want to disconnect a user when you receive a HTTP 401 (Unauthorized) error.
 function useFetchAndLogErrorMixture(handle: XSWR.Handle) {
   XSWR.useFetch(handle)
   XSWR.useError(handle, console.error)
-  return handle
 }
 ```
 

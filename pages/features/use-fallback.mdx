@@ -14,12 +14,12 @@ When using a Next.js like component
 function useFetchAndFallbackMixture<T>(handle: XSWR.Handle<T>, fallback?: T) {
   XSWR.useFetch(handle)
   XSWR.useFallback(handle, { data: fallback })
-  return handle
 }
 
 function useHelloMix(fallback?: MyData) {
   const handle = XSWR.use(getHelloSchema, [])
-  return useFetchAndFallbackMixture(handle, fallback)
+  useFetchAndFallbackMixture(handle, fallback)
+  return handle
 }
 
 function MyPage(props: { fallback?: Hello }) {

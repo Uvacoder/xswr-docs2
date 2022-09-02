@@ -12,12 +12,12 @@ XSWR.useDebug(handle, label)
 function useFetchAndDebugMixture(handle: XSWR.Handle, label: string) {
   XSWR.useFetch(handle
   XSWR.useDebug(handle, label)
-  return handle
 }
 
 function useHelloMix() {
   const handle = XSWR.use(getHelloSchema, [])
-  return useFetchAndDebugMixture(handle, label)
+  useFetchAndDebugMixture(handle, label)
+  return handle
 }
 ```
 
