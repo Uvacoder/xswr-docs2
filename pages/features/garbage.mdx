@@ -36,10 +36,14 @@ async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
-  if (!res.ok) throw new Error()
+  const expiration = Date.now() + (60 * 1000)
+
+  if (!res.ok) {
+    const error = new Error(await res.text())
+    return { error, expiration }
+  }
 
   const data = await res.json() as T
-  const expiration = Date.now() + (60 * 1000)
   return { data, expiration }
 }
 ```

@@ -42,7 +42,11 @@ async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
-  if (!res.ok) throw new Error()
+
+  if (!res.ok) {
+    const error = new Error(await res.text())
+    return { error }
+  }
 
   const data = await res.json() as T
   return { data }
