@@ -1,6 +1,6 @@
-# Cursor-based pagination
+# Scroll pagination
 
-You can use scroll to scroll through a cursor-based resource.
+You can use `XSWR.scroll` to scroll through a cursor-based or offset-based resource.
 
 ```tsx
 XSWR.scroll(scroller, fetcher, cooldown?, timeout?)
@@ -26,7 +26,7 @@ type Scroller<D = any, K = any> = (previous?: D) => K | undefined
 
 If you use `useScroll`, the scroller must be memoized as it acts like a key, you can create one with a `useCallback` or use a top-level function.
 
-### Example
+### Cursor-based example
 
 ```tsx
 function getHelloSchema() {
