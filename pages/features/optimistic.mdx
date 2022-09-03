@@ -10,7 +10,11 @@ This feature is only available for single resources, using `handle.update(previo
 
 You have to implement the actual update by using the extra `data` parameter in your fetcher.
 
-You can, for example, do a `POST` request when the extra `data` parameter is passed, and `GET` otherwise. 
+You can, for example, do a `POST` request when the extra `data` parameter is passed, and `GET` otherwise.
+
+Optimistic updates are fully abortables like any other request, using `handle.aborter`.
+
+You can tell wether some state is optimistic by checking `handle.optimistic` (boolean).
 
 ### Example 
 
@@ -42,9 +46,7 @@ export function MyApp() {
   const mydata = useMyData()
 
   const onUpdateClick = useCallback(() => {
-    mydata
-      .update(() => ({ name: "John Doe" }))
-      .catch(alert)
+    mydata.update(() => ({ name: "John Doe" }))
   }, [mydata.update])
 
   return <>
@@ -55,57 +57,5 @@ export function MyApp() {
       Update
     </button>
   </>
-}
-```
-
-### Warning
-
-`handle.update()` will throw if an error is thrown
-
-### Implementation
-
-```tsx
-async update<D = any, E = any, K = any>(
-  key: K | undefined,
-  skey: string | undefined,
-  poster: Poster<D, K>,
-  updater: Updater<D>,
-  aborter = new AbortController(),
-  params: Params<D, E> = {},
-) {
-  if (key === undefined) return
-  if (skey === undefined) return
-
-  const {
-    cooldown: dcooldown = DEFAULT_COOLDOWN,
-    expiration: dexpiration = DEFAULT_EXPIRATION,
-    timeout: dtimeout = DEFAULT_TIMEOUT,
-  } = params
-
-  const current = await this.core.get<D, E>(skey, params)
-  const updated = updater(current?.data)
-
-  const timeout = setTimeout(() => {
-    aborter.abort("Timed out")
-  }, dtimeout)
-
-  try {
-    const { signal } = aborter
-
-    await this.core.mutate(skey, { data: updated, time: current?.time }, params)
-
-    const {
-      data,
-      cooldown = getTimeFromDelay(dcooldown),
-      expiration = getTimeFromDelay(dexpiration)
-    } = await poster(key, { data: updated, signal })
-
-    return await this.core.mutate<D, E>(skey, { data, cooldown, expiration }, params)
-  } catch (error: any) {
-    this.core.mutate<D, E>(skey, current, params)
-    throw error
-  } finally {
-    clearTimeout(timeout)
-  }
 }
 ```

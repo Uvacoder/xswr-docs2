@@ -8,6 +8,8 @@ You can use a custom cooldown to override or disable this behaviour (use 0 to di
 
 Basically, the fetch is prevented if `Date.now() < state.cooldown`.
 
+You can ignore the deduplication cooldown by using `handle.refetch()`.
+
 ### Resource cooldown delay
 
 You can set a cooldown delay for all resources in your core provider.

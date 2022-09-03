@@ -1,10 +1,14 @@
 # Cancellable requests
 
-You can cancel requests by using AbortControllers.
+You can cancel requests with AbortControllers.
 
 ### Automatic cancellation
 
 Requests are automatically cancelled if their timeout is exceeded (by default 5 seconds).
+
+When using `handle.refetch()`, ongoing requests are cancelled.
+
+### Defining a timeout 
 
 You can set an timeout delay for all resources in your core provider.
 
@@ -98,5 +102,3 @@ function Component() {
 ```
 
 Note: `handle.aborter` will be set to your custom aborter, even for other components in the tree.
-
-Note: custom aborter also works for `handle.update()`, but the passed aborter won't be available in `handle.aborter`.
