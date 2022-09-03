@@ -29,9 +29,9 @@ function getHelloSchema() {
 }
 ```
 
-You have to prepare your fetcher for abortion in order to use automatic cancellation.
-
 ## Preparing your fetcher for abortion
+
+You have to prepare your fetcher for abortion in order to abort it on the fly.
 
 You can pass the AbortSignal to your fetcher (e.g. fetch) in order to cancel the request and throw an error when the signal is triggered.
 
