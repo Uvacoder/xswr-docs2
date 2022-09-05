@@ -70,8 +70,8 @@ If you want to display data on first render, you can do so by using either:
 
 ### AsyncLocalStorage
 
-- Constructor: `new XSWR.AsyncLocalStorage(serializer?)`
-- Hook (static): `useAsyncLocalStorage(serializer?)`
+- Constructor: `new XSWR.AsyncLocalStorage(prefix?, serializer?)`
+- Hook (static): `useAsyncLocalStorage(prefix?, serializer?)`
 
 This storage is asynchronous and uses the browser LocalStorage.
 
@@ -81,15 +81,19 @@ If you want to display data on first render, you can do so by using either:
 - SyncLocalStorage
 - useFallback()
 
+You can set a custom prefix for all keys, by default it's `xswr:`.
+
 You can pass a custom serializer (default is JSON) for serializing values (keys are already serialized by the `Params` serializer).
 
 ### SyncLocalStorage
 
-- Constructor: `new XSWR.SyncLocalStorage(serializer?)`
-- Hook (static): `useSyncLocalStorage(serializer?)`
+- Constructor: `new XSWR.SyncLocalStorage(prefix?, serializer?)`
+- Hook (static): `useSyncLocalStorage(prefix?, serializer?)`
 
 This storage is synchronous and uses the browser LocalStorage.
 
 Being synchronous allows displaying data on first render, but it won't work with SSR.
+
+You can set a custom prefix for all keys, by default it's `xswr:`.
 
 You can pass a custom serializer (default is JSON) for serializing values (keys are already serialized by the `Params` serializer).
