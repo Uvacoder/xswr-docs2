@@ -1,0 +1,60 @@
+# Store normalization
+
+Store normalization allows you to have a single source of truth for all your data.
+
+Benefits can be:
+- improved memory usage, because only minimal data is stored
+- preventing extra requests by using a centralized cooldown
+- simplify your code by only using elements instead of containers
+
+## Example
+
+We'll use normalization for an array that contains items of type Data, each with an unique id
+
+```tsx
+interface Data {
+  id: string
+  name: string
+}
+```
+
+First, create a schema factory for an item
+
+```tsx
+function getDataSchema(id: string) {
+  return XSWR.single<Data>(`/api/data?id=${id}`, fetchAsJson)
+}
+```
+
+Then, create a normal for an item
+
+A normal is an object that encapsulates your data, its schema, and a reference to your data (so we can delete the original data and just keep the reference)
+
+```tsx
+function getDataNormal(data: Data) {
+  return new XSWR.Normal(data, getDataSchema(data.id), data.id)
+}
+```
+
+Then, create a schema for your container, and create a normalizer, it will return then new structure of your container
+
+In this case, all the array is mapped to normals, which will then automatically be replaced by references by XSWR
+
+```tsx
+function getAllDataSchema() {
+  function normalizer(data: Data[]) {
+    return data.map(getDataNormal)
+  }
+
+  return XSWR.single<Data[], Error, string[]>(
+    `/api/data/all`,
+    fetchAsJson,
+    { normalizer })
+}
+```
+
+Notice the extra type parameter `string[]`, it's the final type of our container, after normalization
+
+That's it! No dependency needed, it just works!
+
+You can find a full example in [test/next/normalizer](https://github.com/hazae41/xswr/blob/master/test/next/pages/normalize/index.tsx)

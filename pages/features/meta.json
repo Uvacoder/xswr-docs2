@@ -15,5 +15,6 @@
   "abortion": "Cancellable requests",
   "garbage": "Garbage collection",
   "storage": "Persistent storage",
-  "schemas": "Schemas and imperative code"
+  "schemas": "Schemas and imperative code",
+  "normalization": "Store normalization"
 }
