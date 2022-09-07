@@ -7,7 +7,13 @@ Benefits can be:
 - preventing extra requests by using a centralized cooldown
 - simplify your code by only using elements instead of containers
 
-## Example
+XSWR supports any data structure for normalization, with any level of nesting, without any extra dependency.
+
+You can give it an already normalized structure (e.g. with normalizr), or a simple array, or a deeply nested, GraphQL-like data structure with duplicated data everywhere.
+
+It just works!
+
+## Example with an array
 
 We'll use normalization for an array that contains items of type Data, each with an unique id
 
