@@ -31,7 +31,7 @@ You can either call `schema.make(core, params)` from non-React world.
 ```tsx
 function mutateSomeCat(id: string, core: XSWR.Core, params: XSWR.Params) {
   const object = getCatSchema(id).make(core, params)
-  await object.mutate({ data: "hello world" })
+  await object.mutate(() => ({ data: "hello world" }))
   await object.fetch()
 }
 ```
@@ -44,7 +44,7 @@ function SomeButton() {
 
   const doSomething = useCallback(async () => {
     const object = make(getCatSchema("123"))
-    await object.mutate({ data: "hello world" })
+    await object.mutate(() => ({ data: "hello world" }))
     await object.fetch()
   }, [make])
 
@@ -52,14 +52,4 @@ function SomeButton() {
     Click me
   </button>
 }
-```
-
-
-`make`, `Schema.make`, and Object constructors all accept `initialize` as last optional parameter (default true) in order to initialize the object with the current state.
-
-It can be set to false for optimizing performances when you just need to call `mutate` and don't need the data, for example:
-
-```tsx
-const object = make(getHelloSchema(), false) // Won't load the state in the object
-await object.mutate({ data: "Hello World" })
 ```
