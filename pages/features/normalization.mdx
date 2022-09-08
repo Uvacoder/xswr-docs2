@@ -13,7 +13,7 @@ You can give it an already normalized structure (e.g. with normalizr), or a simp
 
 It just works!
 
-## Example with an array
+## Simple example with an array
 
 We'll use normalization for an array that contains items of type Data, each with an unique id
 
@@ -63,4 +63,87 @@ Notice the extra type parameter `string[]`, it's the final type of our container
 
 That's it! No dependency needed, it just works!
 
-You can find a full example in [test/next/normalizer](https://github.com/hazae41/xswr/blob/master/test/next/pages/normalize/index.tsx)
+## Complex example with nested objects and arrays
+
+Start by defining your data, and a normalized version of your data
+
+```tsx
+export interface VideoData {
+  id: string
+  title: string
+  author: ProfileData
+  comments: CommentData[]
+}
+
+export interface NormalizedVideoData {
+  id: string
+  title: string
+  author: string
+  comments: string[]
+}
+````
+
+Then create schema with a normalizer, which will convert all normalizable data into normals
+
+```tsx
+export function getVideoSchema(id: string) {
+  function normalizer(video: VideoData) {
+    const author = getProfileNormal(video.author) // Object
+    const comments = video.comments.map(getCommentNormal) // Array
+    return { ...video, author, comments }
+  }
+
+  return XSWR.single<VideoData, Error, NormalizedVideoData>(
+    `/api/theytube/video?id=${id}`,
+    fetchAsJson,
+    { normalizer })
+}
+```
+
+(Don't forget to put `NormalizedVideoData` in the type parameters)
+
+Since XSWR store normalization is recursive, you can (and should) also define a normal for your data
+
+Your video will be able to be contained in larger objects, like a `allVideos` array, or a `videosPerAuthor` mapping
+
+```tsx
+export function getVideoNormal(video: VideoData) {
+  return new XSWR.Normal(video, getVideoSchema(video.id), video.id)
+}
+```
+
+You can then create a handle
+
+```tsx
+export function useVideo(id: string) {
+  const handle = XSWR.use(getVideoSchema, [id])
+  XSWR.useFetch(handle)
+  return handle
+}
+```
+
+And finally, use the normalized version of your data for displaying it
+
+```tsx
+export function Video(props: { id: string }) {
+  const video = useVideo(props.id)
+
+  if (!video.data) return null
+
+  return <div className="p-4 border border-solid border-gray-500">
+    <div className="flex justify-center items-center w-full aspect-video border border-solid border-gray-500">
+      Some video
+    </div>
+    <div className="py-4">
+      <h1 className="text-xl">
+        {video.data.title}
+      </h1>
+      <Profile id={video.data.author} />
+    </div>
+    {video.data.comments.map(id =>
+      <Comment key={id} id={id} />)}
+  </div>
+}
+```
+
+That's it!
