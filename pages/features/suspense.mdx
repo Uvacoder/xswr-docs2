@@ -79,7 +79,7 @@ function useData(fallback?: Data) {
 function Page(props: { fallback?: Data }) {
   const { data, suspend } = useData(props.fallback)
 
-  if (error) return <>Error lol</>
+  if (error) throw error
 
   // No data means we're on the client
   if (!data) throw suspend()
@@ -95,7 +95,7 @@ function Page() {
   const ssr = useAreWeOnTheServer()
   const { data, suspend } = useData()
 
-  if (error) return <>Error lol</>
+  if (error) throw error
 
   if (!data && ssr) return <>Hi server</>
 
