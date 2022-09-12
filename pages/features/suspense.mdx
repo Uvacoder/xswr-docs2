@@ -1,0 +1,43 @@
+# React Suspense
+
+Using React Suspense with XSWR is super natural and easy
+
+You just have to replace all your `<Loader />` with `suspend()`
+
+It will suspend until the next state change, where you will choose to throw an error, suspend again, or render your component
+
+Note: Since useEffect don't work when suspended, suspend() will automatically run a deduped fetch(), to avoid waiting indefinitely
+
+### Example
+
+A traditional React component...
+
+```tsx
+function Component() {
+  const { data, error } = useData()
+
+  if (error) return <Error />
+
+  if (!data) return <Loader />
+
+  return <div>{JSON.stringify(data)}</div>
+}
+```
+
+...now becomes
+
+```tsx
+function Component() {
+  const { data, error, suspend } = useData()
+
+  // Throw the error
+  if (error) throw error
+
+  // Fetch and suspend until next state change
+  if (!data) throw suspend()
+
+  return <div>{JSON.stringify(data)}</div>
+}
+```
+
+That's it, you have control over when you suspend and when you throw 🚀

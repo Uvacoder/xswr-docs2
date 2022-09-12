@@ -16,5 +16,6 @@
   "garbage": "Garbage collection",
   "storage": "Persistent storage",
   "schemas": "Schemas and imperative code",
-  "normalization": "Store normalization"
+  "normalization": "Store normalization",
+  "suspense": "React Suspense"
 }
