@@ -6,7 +6,7 @@ You just have to replace all your `<Loader />` with `suspend()`
 
 It will suspend until the next state change, where you will choose to throw an error, suspend again, or render your component
 
-Note: Since useEffect don't work when suspended, suspend() will automatically run a deduped fetch(), to avoid waiting indefinitely
+Note: Since useEffect doesn't work when suspended, suspend() will automatically run a deduped fetch(), to avoid waiting indefinitely
 
 ### Example
 
