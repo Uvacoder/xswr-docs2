@@ -24,6 +24,15 @@ interface Data {
 }
 ```
 
+Let's define a reference to it
+
+```tsx
+interface Ref {
+  ref: true // type checker
+  id: string
+}
+```
+
 First, create a schema factory for an item
 
 ```tsx
@@ -32,13 +41,16 @@ function getDataSchema(id: string) {
 }
 ```
 
-Then, create a normal for an item
+Then, create a ref factory for an item
 
 A normal is an object that encapsulates your data, its schema, and a reference to your data (so we can delete the original data and just keep the reference)
 
 ```tsx
-function getDataNormal(data: Data) {
-  return new XSWR.Normal(data, getDataSchema(data.id), data.id)
+async function getDataRef(data: Data | Ref, more: XSWR.NormalizerMore) {
+  if ("ref" in data) return data // don't normalize a ref
+  const schema = getDataSchema(data.id) // grab the schema of this item
+  await schema.normalize(data, more) // mutate it in storage and apply recursive normalization
+  return { ref: true, id: data.id } as Ref // return a reference to it
 }
 ```
 
@@ -48,18 +60,53 @@ In this case, all the array is mapped to normals, which will then automatically 
 
 ```tsx
 function getAllDataSchema() {
-  function normalizer(data: Data[]) {
-    return data.map(getDataNormal)
+  async function normalizer(data: Data[], more: XSWR.NormalizerMore) {
+    return await Promise.all(data.map(it => getDataNormal(it, more)))
   }
 
-  return XSWR.single<Data[], Error, string[]>(
+  return XSWR.single<(Data | Ref)[]>(
     `/api/data/all`,
     fetchAsJson,
     { normalizer })
 }
 ```
 
-Notice the extra type parameter `string[]`, it's the final type of our container, after normalization
+Notice the modified type parameter `(Data | Ref)[]`, it means our container can hold both data and references
+
+Then create an element component
+
+```tsx
+function useData(id: string) {
+  return XSWR.use(getDataSchema, [id])
+}
+
+function Element(props: { id: string }) {
+  const { data } = useData(id)
+
+  return <div>{JSON.stringify(data)}</div>
+}
+```
+
+And a container component
+
+```tsx
+function useAllData() {
+  const handle = XSWR.use(getAllDataSchema, [])
+  XSWR.useFetch(handle)
+  return handle
+}
+
+function Container() {
+  const { data } = useAllData()
+
+  return <>
+    {data?.map(dataOrRef =>
+      <Element
+        key={dataOrRef.id}
+        id={dataOrRef.id} />)}
+  </>
+}
+```
 
 That's it! You can find a full working example in the [array test](https://github.com/hazae41/xswr/tree/master/test/next/pages/array)
 
@@ -68,6 +115,11 @@ That's it! You can find a full working example in the [array test](https://githu
 Start by defining your data, and a normalized version of your data
 
 ```tsx
+export interface VideoRef {
+  ref: true
+  id: string
+}
+
 export interface VideoData {
   id: string
   title: string
@@ -78,8 +130,8 @@ export interface VideoData {
 export interface NormalizedVideoData {
   id: string
   title: string
-  author: string
-  comments: string[]
+  author: ProfileRef
+  comments: ProfileRef[]
 }
 ````
 
@@ -87,13 +139,13 @@ Then create schema with a normalizer, which will convert all normalizable data i
 
 ```tsx
 export function getVideoSchema(id: string) {
-  function normalizer(video: VideoData) {
-    const author = getProfileNormal(video.author) // Object
-    const comments = video.comments.map(getCommentNormal) // Array
+  async function normalizer(video: VideoData, more: XSWR.NormalizerMore) {
+    const author = await getProfileRef(video.author, more) // Object
+    const comments = await Promise.all(video.comments.map(it => getCommentNormal(it, more))) // Array
     return { ...video, author, comments }
   }
 
-  return XSWR.single<VideoData, Error, NormalizedVideoData>(
+  return XSWR.single<VideoData | NormalizedVideoData, Error>(
     `/api/theytube/video?id=${id}`,
     fetchAsJson,
     { normalizer })
@@ -102,13 +154,16 @@ export function getVideoSchema(id: string) {
 
 (Don't forget to put `NormalizedVideoData` in the type parameters)
 
-Since XSWR store normalization is recursive, you can (and should) also define a normal for your data
+Since XSWR store normalization is recursive, you can (and should) also define a ref factory for your data
 
 Your video will be able to be contained in larger objects, like a `allVideos` array, or a `videosPerAuthor` mapping
 
 ```tsx
-export function getVideoNormal(video: VideoData) {
-  return new XSWR.Normal(video, getVideoSchema(video.id), video.id)
+export async function getVideoRef(video: VideoData | VideoRef, more: XSWR.NormalizerMore) {
+  if ("ref" in video) return video // already a reference
+  const schema = getVideoSchema(video.id)
+  await schema.normalize(video, more)
+  return { ref: true, id: video.id } as VideoRef
 }
 ```
 
@@ -138,10 +193,13 @@ export function Video(props: { id: string }) {
       <h1 className="text-xl">
         {video.data.title}
       </h1>
-      <Profile id={video.data.author} />
+      <Profile 
+        id={video.data.author.id} />
     </div>
-    {video.data.comments.map(id =>
-      <Comment key={id} id={id} />)}
+    {video.data.comments.map(dataOrRef =>
+      <Comment 
+        key={dataOrRef.id} 
+        id={dataOrRef.id} />)}
   </div>
 }
 ```
