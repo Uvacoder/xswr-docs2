@@ -6,11 +6,18 @@ If the fetcher throws an error, xswr will rollback the resource to the previous 
 
 ### Usage
 
+Just use "yield" with your optimistic state, which will be replaced if success or reverted if error
+
+Then use "return" with your final state.
+
+```tsx
+document.update(async function* (previous) {
+  yield { data: "My optimistic document" }
+  return await postAsJson("/api/edit", "My document")
+})
+```
+
 This feature is only available for single resources, using `handle.update(previous => data)`.
-
-You have to implement the actual update by using the extra `data` parameter in your fetcher.
-
-You can, for example, do a `POST` request when the extra `data` parameter is passed, and `GET` otherwise.
 
 Optimistic updates are fully abortables like any other request, using `handle.aborter`.
 
@@ -19,21 +26,27 @@ You can tell wether some state is optimistic by checking `handle.optimistic` (bo
 ### Example 
 
 ```tsx
-async function postAsJson<T>(url: string, more: XSWR.PosterMore<T>) {
+async function postAsJson<T>(url: string, data: T) {
   const { data, signal } = more
 
-  const method = data ? "POST" : "GET"
-  const body = data ? JSON.stringify(data) : undefined
-
+  const body = data 
+    ? JSON.stringify(data) 
+    : undefined
   const res = await fetch(url, { method, body, signal })
-  if (!res.ok) throw new Error()
+  const cooldown = Date.now() + (5 * 1000)
+  const expiration = Date.now() + (10 * 1000)
+
+  if (!res.ok) {
+    const error = new Error(await res.text())
+    return { error, cooldown, expiration }
+  }
 
   const data = await res.json() as T
-  return { data }
+  return { data, cooldown, expiration }
 }
 
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson, { cooldown: 5000 })
+  return XSWR.single<Hello>("/api/hello", fetchAsJson)
 }
 
 function useHelloMix() {
@@ -45,8 +58,11 @@ function useHelloMix() {
 export function MyApp() {
   const mydata = useMyData()
 
-  const onUpdateClick = useCallback(() => {
-    mydata.update(() => ({ name: "John Doe" }))
+  const onUpdateClick = useCallback(async () => {
+    await mydata.update(async function* () {
+      yield { data: { name: "John Doe" } }
+      return await postAsJson("/api/edit", { name: "John Doe" })
+    })
   }, [mydata.update])
 
   return <>

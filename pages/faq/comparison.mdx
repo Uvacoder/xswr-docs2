@@ -25,7 +25,10 @@ await queryClient.prefetchQuery(['user'], fetchUser)
 ### xswr
 
 ```tsx
-todos.update(old => [...old, todo])
+document.update(async function* (previous) {
+  yield { data: "My optimistic document" }
+  return await postAsJson("/api/edit", "My document")
+})
 ```
 
 ### swr
