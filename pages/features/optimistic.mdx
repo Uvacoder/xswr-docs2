@@ -23,6 +23,38 @@ Optimistic updates are fully abortables like any other request, using `handle.ab
 
 You can tell wether some state is optimistic by checking `handle.optimistic` (boolean).
 
+### Optimistic fetch
+
+You can return nothing in your updater in order to use the schema's fetcher
+
+```tsx
+document.update(async function* () {
+  yield { data: "My optimistic document" }
+  await new Promise(ok => setTimeout(ok, 5000))
+  // no return, will use document.fetcher to get the new state
+})
+```
+
+This is useful when you know the resource will be updated but want to display an optimistic state.
+
+Also, `{ cache: "reload" }` will be passed to the fetcher in order to skip the cache, feel free to pass it to JS fetch, Axios, ... or ignore it
+
+```tsx
+async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+  const { signal, cache } = more
+
+  const res = await fetch(url, { signal, cache })
+
+  if (!res.ok) {
+    const error = new Error(await res.text())
+    return { error }
+  }
+
+  const data = await res.json() as T
+  return { data }
+}
+```
+
 ### Example 
 
 ```tsx
