@@ -13,7 +13,35 @@ You can give it an already normalized structure (e.g. with normalizr), or a simp
 
 It just works!
 
-## Simple example with an array
+## Usage 
+
+You just have to define a normalizer function that will take your data and return the same data but normalized.
+
+```tsx
+async function normalizer(data: Data, more: XSWR.NormalizerMore) {
+  // Do some normalization
+  return { ...data }
+}
+```
+
+You can use `await schema.normalize(data, more)` to recursively normalize a schema with the given data.
+
+```tsx
+async function getDataRef(data: Data | Ref, more: XSWR.NormalizerMore) {
+  if ("ref" in data) return data // don't normalize a ref
+  const schema = getDataSchema(data.id) // grab the schema of this item
+  await schema.normalize(data, more) // mutate it in storage and apply recursive normalization
+  return { ref: true, id: data.id } as Ref // return a reference to it
+}
+
+async function normalizer(data: Data[], more: XSWR.NormalizerMore) {
+  async function normalizer(data: Data[], more: XSWR.NormalizerMore) {
+    return await Promise.all(data.map(it => getDataRef(it, more)))
+  }
+}
+```
+
+# Complete example with an array
 
 We'll use normalization for an array that contains items of type Data, each with an unique id
 
@@ -61,7 +89,7 @@ In this case, all the array is mapped to normals, which will then automatically 
 ```tsx
 function getAllDataSchema() {
   async function normalizer(data: Data[], more: XSWR.NormalizerMore) {
-    return await Promise.all(data.map(it => getDataNormal(it, more)))
+    return await Promise.all(data.map(it => getDataRef(it, more)))
   }
 
   return XSWR.single<(Data | Ref)[]>(
@@ -141,7 +169,7 @@ Then create schema with a normalizer, which will convert all normalizable data i
 export function getVideoSchema(id: string) {
   async function normalizer(video: VideoData, more: XSWR.NormalizerMore) {
     const author = await getProfileRef(video.author, more) // Object
-    const comments = await Promise.all(video.comments.map(it => getCommentNormal(it, more))) // Array
+    const comments = await Promise.all(video.comments.map(it => getCommentRef(it, more))) // Array
     return { ...video, author, comments }
   }
 

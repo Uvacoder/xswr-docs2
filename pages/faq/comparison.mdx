@@ -86,13 +86,13 @@ Unsupported.
 
 ### react-query
 
-Global and per-query expiration time. You must define an expiration time at global scope or query scope.
+Global and per-query expiration time. You can only define an expiration time at global scope or query scope.
 
 ## Persistent storage
 
 ### xswr
 
-Per-query persistent storage. You can choose which queries are persistent. Out of the box support for IndexedDB and LocalStorage.
+Per-query persistent storage. You can set a query as persistent in its schema. Out of the box support for IndexedDB and LocalStorage.
 
 ### swr
 
@@ -100,19 +100,19 @@ Partial support. You have to create your own storage or install third party ones
 
 ### react-query
 
-Global persistent storage. You either persist your whole app or nothing. You have to install extra dependencies.
+Global persistent storage. You persist your whole app and define excluded queries using `shouldDehydrateQuery`. You have to install extra dependencies.
 
 ## Store normalization
 
-## xswr
+### xswr
 
 Very simple. Out of the box. No dependency needed.
 
-## swr
+### swr
 
 Unsupported.
 
-## react-query
+### react-query
 
 Unsupported.
 
@@ -120,10 +120,24 @@ Unsupported.
 
 Super natural and easy. Doesn't enforce any pattern and doesn't require any configuration. Partially compatible with SSR.
 
+```tsx
+function Component() {
+  const { data, error, suspend } = useData()
+
+  // Throw the error
+  if (error) throw error
+
+  // Fetch and suspend until next state change
+  if (!data) throw suspend()
+
+  return <div>{JSON.stringify(data)}</div>
+}
+```
+
 ### swr
 
 Forces you to use an ErrorBoundary. No control over when to throw and when to suspend. Not compatible with SSR.
 
 ### react-query
 
-Over-engineered. You have to use a configuration for it to work like you want. Compatibility with SSR? Unknown.
+Seems simple at first but you have to use a configuration for it to work like you want. Error catching requires boilerplate code. Compatibility with SSR? Unknown.
