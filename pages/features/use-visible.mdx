@@ -3,24 +3,24 @@
 You can use `useVisible` to fetch a resource when the tab is focused.
 
 ```tsx
-XSWR.useVisible(handle) 
+useVisible(query) 
 ```
 
 ### Example
 
 ```tsx
-function useAutoFetchMixture(handle: XSWR.Handle) {
-  XSWR.useFetch(handle)
-  XSWR.useVisible(handle)
-  XSWR.useOnline(handle)
+function useAutoFetchMixture(query: Query) {
+  useFetch(query)
+  useVisible(query)
+  useOnline(query)
 }
 ```
 
 ### Implementation
 
 ```tsx
-export function useVisible(handle: Handle) {
-  const { fetch } = handle
+export function useVisible(query: Query) {
+  const { fetch } = query
 
   useEffect(() => {
     const f = () => !document.hidden && fetch()

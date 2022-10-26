@@ -9,7 +9,7 @@
   "use-error": "Call a function on error",
   "use-debug": "Debugging a resource",
   "use-fallback": "Using SSR & ISR",
-  "use-scroll": "Scroll pagination",
+  "scrolling": "Scroll pagination",
   "cooldown": "Deduplication cooldown",
   "optimistic": "Optimistic updates",
   "abortion": "Cancellable requests",

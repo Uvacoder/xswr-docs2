@@ -25,7 +25,7 @@ Or you can set an expiration delay for some resource.
 
 ```tsx
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson, { expiration: 60 * 1000 })
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson, { expiration: 60 * 1000 })
 }
 ```
 
@@ -34,7 +34,7 @@ function getHelloSchema() {
 You can also set an expiration time directly in your fetcher.
 
 ```tsx
-async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+async function fetchAsJson<T>(url: string, more: FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })

@@ -1,8 +1,8 @@
-# Your first mix
+# Your first mix 🧪
 
 When using xswr and its composition-based hooks, you create a mix and only include the ingredients you want.
 
-We'll do a request at `/api/hello` using JSON, display it with a loading, and automatically refetch it.
+We'll do a request at `/api/data` using JSON, display it with a loading, and automatically refetch it.
 
 ## Create a fetcher ⚡️
 
@@ -18,16 +18,17 @@ async function fetchAsJson<T>(url: string) {
 
 ## Create a mix 🌪
 
-Then create a mix using a handle and some blocks.
+Then create a mix using a query and some blocks.
 
 ```tsx
 function useHello() {
-  const handle = XSWR.useSingle<Hello>(`/api/hello`, fetchAsJson)
+  const query = useSingleQuery<Hello>(`/api/hello`, fetchAsJson)
   
-  XSWR.useFetch(handle) // Fetch on mount and on url change
-  XSWR.useVisible(handle) // Fetch when the page becomes visible
-  XSWR.useOnline(handle) // Fetch when the browser becomes online
-  return handle
+  useFetch(query) // Fetch on mount and on url change
+  useVisible(query) // Fetch when the page becomes visible
+  useOnline(query) // Fetch when the browser becomes online
+
+  return query
 }
 ```
 

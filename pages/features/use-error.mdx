@@ -3,7 +3,7 @@
 You can use `useError` to call a function on error.
 
 ```tsx
-XSWR.useError(handle, onerror) 
+useError(query, onerror) 
 ```
 
 ### Motivation
@@ -13,9 +13,9 @@ You want to disconnect a user when you receive a HTTP 401 (Unauthorized) error.
 ### Example
 
 ```tsx
-function useFetchAndLogErrorMixture(handle: XSWR.Handle) {
-  XSWR.useFetch(handle)
-  XSWR.useError(handle, console.error)
+function useFetchAndLogErrorMixture(query: Query) {
+  useFetch(query)
+  useError(query, console.error)
 }
 ```
 
@@ -23,10 +23,10 @@ function useFetchAndLogErrorMixture(handle: XSWR.Handle) {
 
 ```tsx
 export function useError<D = any, E = any>(
-  handle: Handle<D, E>,
+  query: Query<D, E>,
   callback: (e: E) => void
 ) {
-  const { error } = handle
+  const { error } = query
 
   useEffect(() => {
     if (error !== undefined) callback(error)

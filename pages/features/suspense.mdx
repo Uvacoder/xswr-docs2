@@ -69,15 +69,15 @@ Suspense doesn't work with SSR since the server can't use fetch. Or can it?
 You can combine `suspend()` with `useFallback`
 
 ```tsx
-function useData(fallback?: Data) {
-  const handle = XSWR.use(getDataSchema, [])
-  XSWR.useFallback(handle, { data: fallback })
-  return handle
+function useData(data?: Data) {
+  const query = useQuery(getDataSchema, [])
+  useFallback(query, { data })
+  return query
 }
 
 // Let's assume fallback will always be available on the server
-function Page(props: { fallback?: Data }) {
-  const { data, suspend } = useData(props.fallback)
+function Page(props: { data?: Data }) {
+  const { data, suspend } = useData(props.data)
 
   if (error) throw error
 

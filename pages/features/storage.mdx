@@ -7,38 +7,42 @@ You can create a persistent storage and use it only where you want.
 Create a storage either at top-level...
 
 ```tsx
-const storage = new XSWR.IDBStorage("mydb")
+import { Storage } from "@hazae41/storage"
 
-function getHelloSchema(storage?: XSWR.Storage) {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson, { storage })
+const storage = new IDBStorage("mydb")
+
+function getHelloSchema(storage?: Storage) {
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson, { storage })
 }
 
 function useHelloMix() {
-  const handle = XSWR.use(getHelloSchema, [storage])
-  useAutoFetchMixture(handle)
-  return handle
+  const query = useQuery(getHelloSchema, [storage])
+  useAutoFetchMixture(query)
+  return query
 }
 ```
 
 ...or using a hook.
 
 ```tsx
-function getHelloSchema(storage?: XSWR.Storage) {
-  return XSWR.single("/api/hello", fetchAsJson, { storage })
+import { Storage } from "@hazae41/storage"
+
+function getHelloSchema(storage?: Storage) {
+  return getSingleSchema("/api/hello", fetchAsJson, { storage })
 }
 
 function useHelloMix() {
-  const storage = XSWR.useIDBStorage("mydb")
-  const handle = XSWR.use(getHelloSchema, [storage])
-  useAutoFetchMixture(handle)
-  return handle
+  const storage = useIDBStorage("mydb")
+  const query = useQuery(getHelloSchema, [storage])
+  useAutoFetchMixture(query)
+  return query
 }
 ```
 
 You can also pass it into a CoreProvider to enable persistent storage for all children.
 
 ```tsx
-const storage = new XSWR.IDBStorage("mydb")
+const storage = new IDBStorage("mydb")
 
 function MyWrapper() {
   return <XSWR.CoreProvider
@@ -52,7 +56,7 @@ function MyWrapper() {
 
 ### IDBStorage
 
-- Constructor: `new XSWR.IDBStorage(name)`
+- Constructor: `new IDBStorage(name)`
 - Hook (static): `useIDBStorage(name)`
 
 This storage is asynchronous and uses the browser IndexedDB.
@@ -70,7 +74,7 @@ If you want to display data on first render, you can do so by using either:
 
 ### AsyncLocalStorage
 
-- Constructor: `new XSWR.AsyncLocalStorage(prefix?, serializer?)`
+- Constructor: `new AsyncLocalStorage(prefix?, serializer?)`
 - Hook (static): `useAsyncLocalStorage(prefix?, serializer?)`
 
 This storage is asynchronous and uses the browser LocalStorage.
@@ -87,7 +91,7 @@ You can pass a custom serializer (default is JSON) for serializing values (keys 
 
 ### SyncLocalStorage
 
-- Constructor: `new XSWR.SyncLocalStorage(prefix?, serializer?)`
+- Constructor: `new SyncLocalStorage(prefix?, serializer?)`
 - Hook (static): `useSyncLocalStorage(prefix?, serializer?)`
 
 This storage is synchronous and uses the browser LocalStorage.

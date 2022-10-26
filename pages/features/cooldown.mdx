@@ -8,7 +8,7 @@ You can use a custom cooldown to override or disable this behaviour (use 0 to di
 
 Basically, the fetch is prevented if `Date.now() < state.cooldown`.
 
-You can ignore the deduplication cooldown by using `handle.refetch()`.
+You can ignore the deduplication cooldown by using `query.refetch()`.
 
 ### Resource cooldown delay
 
@@ -27,7 +27,7 @@ Or you can set a cooldown delay for some resource.
 
 ```tsx
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson, { cooldown: 5000 })
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson, { cooldown: 5000 })
 }
 ```
 
@@ -36,7 +36,7 @@ function getHelloSchema() {
 You can also set a cooldown time directly in your fetcher.
 
 ```tsx
-async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+async function fetchAsJson<T>(url: string, more: FetcherMore<T>) {
   const { signal } = more
   
   const res = await fetch(url, { signal })

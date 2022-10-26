@@ -1,4 +1,4 @@
-# Advanced example
+# Advanced example 🗿
 
 Last example was good, but here is the best way to use XSWR.
 
@@ -7,7 +7,7 @@ Last example was good, but here is the best way to use XSWR.
 Our fetcher was good, but this one can be aborted.
 
 ```tsx
-async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+async function fetchAsJson<T>(url: string, more: FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
@@ -26,11 +26,11 @@ It also returns an error if the request failed.
 
 ## Defining schemas 📐
 
-Using [schemas](/features/schemas) may seems boilerplate, but it will save you a lot of time later.
+Using schemas may seems boilerplate, but it will save you a lot of time later.
 
 ```tsx
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson)
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson)
 }
 ```
 
@@ -38,13 +38,13 @@ It allows you to reuse the same set of key+fetcher+params in multiple places, in
 
 ## Creating mixtures 🧪
 
-The [mixtures pattern](/patterns/mixtures) allows you to reuse the same group of blocks.
+The mixtures pattern allows you to reuse the same group of blocks.
 
 ```tsx
-function useAutoFetchMixture(handle: XSWR.Handle) {
-  XSWR.useFetch(handle)
-  XSWR.useVisible(handle)
-  XSWR.useOnline(handle)
+function useAutoFetchMixture(query: Query) {
+  useFetch(query)
+  useVisible(query)
+  useOnline(query)
 }
 ```
 
@@ -54,9 +54,9 @@ Once you got a schema and a mixture, you just have to mix it.
 
 ```tsx
 function useHelloMix() {
-  const handle = XSWR.use(getHelloSchema, [])
-  useAutoFetchMixture(handle)
-  return handle
+  const query = useQuery(getHelloSchema, [])
+  useAutoFetchMixture(query)
+  return query
 }
 ```
 

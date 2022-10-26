@@ -3,7 +3,7 @@
 You can use `useFallback` to display static or server-side data before the request is finished.
 
 ```tsx
-XSWR.useFallback(handle, state) 
+useFallback(query, state) 
 ```
 
 ### Example
@@ -11,19 +11,19 @@ XSWR.useFallback(handle, state)
 When using a Next.js like component
 
 ```tsx
-function useFetchAndFallbackMixture<T>(handle: XSWR.Handle<T>, fallback?: T) {
-  XSWR.useFetch(handle)
-  XSWR.useFallback(handle, { data: fallback })
+function useFetchAndFallbackMixture<D>(query: Query<D>, fallback?: State<D>) {
+  useFetch(query)
+  useFallback(query, fallback)
 }
 
-function useHelloMix(fallback?: MyData) {
-  const handle = XSWR.use(getHelloSchema, [])
-  useFetchAndFallbackMixture(handle, fallback)
-  return handle
+function useHelloMix(data?: MyData) {
+  const query = useQuery(getHelloSchema, [])
+  useFetchAndFallbackMixture(query, { data })
+  return query
 }
 
-function MyPage(props: { fallback?: Hello }) {
-  const { data, error } = useHelloMix(props.fallback)
+function MyPage(props: { data?: MyData }) {
+  const { data, error } = useHelloMix(props.data)
 
   return <>...</>
 }
@@ -33,13 +33,13 @@ function MyPage(props: { fallback?: Hello }) {
 
 ```tsx
 export function useFallback<D = any, E = any>(
-  handle: Handle<D, E>,
+  query: Query<D, E>,
   state?: State<D, E>
 ) {
-  const { data, error } = handle
+  const { data, error } = query
 
   if (data !== undefined) return
   if (error !== undefined) return
-  Object.assign(handle, state)
+  Object.assign(query, state)
 }
 ```

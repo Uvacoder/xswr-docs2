@@ -3,25 +3,25 @@
 You can use `useFetch` to fetch a resource on mount and on key change.
 
 ```tsx
-XSWR.useFetch(handle) 
+useFetch(query) 
 ```
 
 ### Example
 
 ```tsx
 function useHello() {
-  const handle = XSWR.use(getHelloSchema, [])
+  const query = useQuery(getHelloSchema, [])
 
-  XSWR.useFetch(handle)
-  return handle
+  useFetch(query)
+  return query
 }
 ```
 
 ### Implementation
 
 ```tsx
-export function useFetch(handle: Handle) {
-  const { fetch } = handle
+export function useFetch(query: Query) {
+  const { fetch } = query
 
   useEffect(() => {
     fetch()

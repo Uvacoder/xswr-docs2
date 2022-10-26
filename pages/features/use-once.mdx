@@ -3,7 +3,7 @@
 You can use `useOnce` to fetch a resource on mount and on key change, but only if there is no data.
 
 ```tsx
-XSWR.useOnce(handle) 
+useOnce(query) 
 ```
 
 ### Motivation
@@ -18,18 +18,17 @@ Will still try to fetch if there is an error.
 
 ```tsx
 function useHelloOnce() {
-  const handle = XSWR.use(getHelloSchema, [])
-
-  XSWR.useOnce(handle)
-  return handle
+  const query = useQuery(getHelloSchema, [])
+  useOnce(query)
+  return query
 }
 ```
 
 ### Implementation
 
 ```tsx
-export function useOnce(handle: Handle) {
-  const { data, fetch } = handle
+export function useOnce(query: Query) {
+  const { data, fetch } = query
 
   useEffect(() => {
     if (data === undefined) fetch()

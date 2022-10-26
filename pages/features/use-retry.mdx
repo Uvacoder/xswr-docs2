@@ -3,7 +3,7 @@
 You can use `useRetry` to retry on error using the exponential backoff algorithm.
 
 ```tsx
-XSWR.useRetry(handle, { init: 1000, base: 2, max: 3 }) 
+useRetry(query, { init: 1000, base: 2, max: 3 }) 
 ```
 
 ### About
@@ -31,9 +31,9 @@ The count is reset when a retry succeeds.
 ### Usage example
 
 ```tsx
-function useFetchAndRetryMixture(handle: XSWR.Handle) {
-  XSWR.useFetch(handle)
-  XSWR.useRetry(handle, { init: 1000, base: 2, max: 3 }) 
+function useFetchAndRetryMixture(query: Query) {
+  useFetch(query)
+  useRetry(query, { init: 1000, base: 2, max: 3 }) 
 }
 ```
 
@@ -46,8 +46,8 @@ export interface RetryOptions {
   max?: number
 }
 
-export function useRetry(handle: Handle, options: RetryOptions = {}) {
-  const { refetch, error, time } = handle
+export function useRetry(query: Query, options: RetryOptions = {}) {
+  const { refetch, error, time } = query
   const { init = 1000, base = 2, max = 3 } = options
 
   const count = useRef(0)

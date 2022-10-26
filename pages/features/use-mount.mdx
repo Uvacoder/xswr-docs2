@@ -3,7 +3,7 @@
 You can use `useMount` to fetch a resource on mount only.
 
 ```tsx
-XSWR.useMount(handle) 
+useMount(query) 
 ```
 
 ### Motivation
@@ -18,18 +18,18 @@ Won't fetch on key change, see [useFetch](/features/use-fetch) for doing so.
 
 ```tsx
 function useHelloMount() {
-  const handle = XSWR.use(getHelloSchema, [])
+  const query = useQuery(getHelloSchema, [])
 
-  XSWR.useMount(handle)
-  return handle
+  useMount(query)
+  return query
 }
 ```
 
 ### Implementation
 
 ```tsx
-export function useMount(handle: Handle) {
-  const { fetch } = handle
+export function useMount(query: Query) {
+  const { fetch } = query
 
   useEffect(() => {
     fetch()

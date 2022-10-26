@@ -8,7 +8,7 @@ export default {
         xswr
       </span>
       <span className="text-gray-600 font-normal hidden md:inline">
-        The simplest React data (re)fetching library ever made
+        Yet another React data (re)fetching library
       </span>
     </>
   ),
@@ -18,13 +18,13 @@ export default {
       <meta name="theme-color" content="#ffffff" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta httpEquiv="Content-Language" content="en" />
-      <meta name="description" content="XSWR: The simplest React data (re)fetching library ever made" />
-      <meta name="og:description" content="XSWR: The simplest React data (re)fetching library ever made" />
+      <meta name="description" content="XSWR: Yet another React data (re)fetching library" />
+      <meta name="og:description" content="XSWR: Yet another React data (re)fetching library" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:image" content="https://xswr.hazae41.me/og.png" />
       <meta name="twitter:site:domain" content="xswr.hazae41.me" />
       <meta name="twitter:url" content="https://xswr.hazae41.me" />
-      <meta name="og:title" content="The simplest React data (re)fetching library ever made" />
+      <meta name="og:title" content="Yet another React data (re)fetching library" />
       <meta name="og:image" content="https://xswr.hazae41.me/og.png" />
       <meta name="apple-mobile-web-app-title" content="XSWR" />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

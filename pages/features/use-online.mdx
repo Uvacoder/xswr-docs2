@@ -3,24 +3,24 @@
 You can use `useOnline` to fetch a resource when the browser becomes online.
 
 ```tsx
-XSWR.useOnline(handle) 
+useOnline(query) 
 ```
 
 ### Example
 
 ```tsx
-function useAutoFetchMixture(handle: XSWR.Handle) {
-  XSWR.useFetch(handle)
-  XSWR.useVisible(handle)
-  XSWR.useOnline(handle)
+function useAutoFetchMixture(query: Query) {
+  useFetch(query)
+  useVisible(query)
+  useOnline(query)
 }
 ```
 
 ### Implementation
 
 ```tsx
-export function useOnline(handle: Handle) {
-  const { fetch } = handle
+export function useOnline(query: Query) {
+  const { fetch } = query
 
   useEffect(() => {
     const f = () => fetch()

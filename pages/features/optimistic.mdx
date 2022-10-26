@@ -17,11 +17,11 @@ document.update(async function* (previous) {
 })
 ```
 
-This feature is only available for single resources, using `handle.update(previous => data)`.
+This feature is only available for single queries.
 
-Optimistic updates are fully abortables like any other request, using `handle.aborter`.
+Optimistic updates are fully abortables like any other request, using `query.aborter`.
 
-You can tell wether some state is optimistic by checking `handle.optimistic` (boolean).
+You can tell wether some state is optimistic by checking `query.optimistic` (boolean).
 
 ### Optimistic fetch
 
@@ -40,7 +40,7 @@ This is useful when you know the resource will be updated but want to display an
 Also, `{ cache: "reload" }` will be passed to the fetcher in order to skip the cache, feel free to pass it to JS fetch, Axios, ... or ignore it
 
 ```tsx
-async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+async function fetchAsJson<T>(url: string, more: FetcherMore<T>) {
   const { signal, cache } = more
 
   const res = await fetch(url, { signal, cache })
@@ -78,13 +78,13 @@ async function postAsJson<T>(url: string, data: T) {
 }
 
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson)
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson)
 }
 
 function useHelloMix() {
-  const handle = XSWR.use(getHelloSchema, [])
-  useAutoFetchMixture(handle)
-  return handle
+  const query = useQuery(getHelloSchema, [])
+  useAutoFetchMixture(query)
+  return query
 }
 
 export function MyApp() {

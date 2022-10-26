@@ -6,7 +6,7 @@ You can cancel requests with AbortControllers.
 
 Requests are automatically cancelled if their timeout is exceeded (by default 5 seconds).
 
-When using `handle.refetch()`, ongoing requests are cancelled.
+When using `query.refetch()`, ongoing requests are cancelled.
 
 ### Defining a timeout 
 
@@ -25,7 +25,7 @@ Or you can set an timeout delay for some resource.
 
 ```tsx
 function getHelloSchema() {
-  return XSWR.single<Hello>("/api/hello", fetchAsJson, { timeout: 5000 })
+  return getSingleSchema<Hello>("/api/hello", fetchAsJson, { timeout: 5000 })
 }
 ```
 
@@ -38,7 +38,7 @@ You can pass the AbortSignal to your fetcher (e.g. fetch) in order to cancel the
 The signal will be passed in the second parameter of your fetcher (`FetcherMore`).
 
 ```tsx
-async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
+async function fetchAsJson<T>(url: string, more: FetcherMore<T>) {
   const { signal } = more
 
   const res = await fetch(url, { signal })
@@ -56,17 +56,17 @@ async function fetchAsJson<T>(url: string, more: XSWR.FetcherMore<T>) {
 You can then ignore AbortErrors in your components.
 
 ```tsx
-if (XSWR.isAbortError(handle.error))
+if (isAbortError(query.error))
   // do not display the error
 else
   // display the error
 ```
 
-## Aborting using handle.aborter
+## Aborting using query.aborter
 
-By default, an aborter is created and passed to your handle for each request.
+By default, an aborter is created and passed to your query for each request.
 
-You can use `handle.aborter.abort` to abort the ongoing request, or `handle.aborter.signal` to check the signal.
+You can use `query.aborter.abort` to abort the ongoing request, or `query.aborter.signal` to check the signal.
 
 ```tsx
 const mydata = useMyData()
@@ -77,9 +77,9 @@ return <button onClick={aborter.abort}>
 <button />
 ```
 
-Note: `handle.aborter` is `undefined` is there is no ongoing request.
+Note: `query.aborter` is `undefined` is there is no ongoing request.
 
-Note: `handle.aborter` will only be available after a render, use a custom aborter with a ref if you want instant access.
+Note: `query.aborter` will only be available after a render, use a custom aborter with a ref if you want instant access.
 
 ## Aborting using custom aborter
 
@@ -105,4 +105,4 @@ function Component() {
 }
 ```
 
-Note: `handle.aborter` will be set to your custom aborter, even for other components in the tree.
+Note: `query.aborter` will be set to your custom aborter, even for other components in the tree.

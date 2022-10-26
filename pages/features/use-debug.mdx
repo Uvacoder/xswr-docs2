@@ -1,23 +1,23 @@
 # Debugging a resource
 
-You can use `useDebug` to log a handle in the console when it's updated.
+You can use `useDebug` to log a query in the console when it's updated.
 
 ```tsx
-XSWR.useDebug(handle, label)
+useDebug(query, label)
 ```
 
 ### Example
 
 ```tsx
-function useFetchAndDebugMixture(handle: XSWR.Handle, label: string) {
-  XSWR.useFetch(handle
-  XSWR.useDebug(handle, label)
+function useFetchAndDebugMixture(query: Query, label: string) {
+  useFetch(query)
+  useDebug(query, label)
 }
 
 function useHelloMix() {
-  const handle = XSWR.use(getHelloSchema, [])
-  useFetchAndDebugMixture(handle, label)
-  return handle
+  const query = useQuery(getHelloSchema, [])
+  useFetchAndDebugMixture(query, label)
+  return query
 }
 ```
 
@@ -25,13 +25,13 @@ function useHelloMix() {
 
 ```tsx
 export function useDebug<D = any, E = any>(
-  handle: Handle<D, E>,
+  query: Query<D, E>,
   label: string
 ) {
-  const { time } = handle
+  const { time } = query
 
   useEffect(() => {
-    console.debug(label, handle)
+    console.debug(label, query)
   }, [time])
 }
 ```
